@@ -210,8 +210,14 @@ public class GUI {
             ImageIcon resizedIcon = new ImageIcon(scaledImage);
             JLabel imageLabel = new JLabel(resizedIcon);
 
-            // adds padding between the cards
-            imageLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            // Check if the card was chosen by the dealer
+            if (card.getChosenByDealer()) {
+                // Add a border to the card if chosen by the dealer
+                imageLabel.setBorder(BorderFactory.createLineBorder(Color.RED, 3));
+            } else {
+                // Otherwise, add an empty border
+                imageLabel.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            }
 
             cardPanel.add(imageLabel);
         }

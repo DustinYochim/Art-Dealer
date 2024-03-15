@@ -74,10 +74,11 @@ public class GameController {
             for (Card card : userHand) {
                 hand.addCard(card);
             }
-            gui.displayHand(hand);
-            Hand dealerHand = dealerChooseCards(hand); // Call dealerChooseCards method
-            gui.displayPrevious(hand.format_hand_for_logger());
+            Hand dealerHand = dealerChooseCards(hand);
+            gui.displayPrevious(hand.format_hand_for_logger()) ;
             File.writeToFile(hand.format_hand_for_logger());
+            gui.displayHand(hand);
+            System.out.println(hand.getHand());
         }
 
         // Reset chosenByDealer attributes to false for all cards in the hand
@@ -92,21 +93,21 @@ public class GameController {
      * @param hand The user's hand of cards.
      * @return The dealer's hand of selected cards.
      */
-    private Hand dealerChooseCards(Hand hand) {
-        Hand dealerHand = new Hand();
+        private Hand dealerChooseCards(Hand hand) {
+            Hand dealerHand = new Hand();
 
-        // Loop through the cards the user picked
-        for (Card card : hand.getHand()) {
-            // Check if the card's suit is HEARTS or DIAMONDS
-            if (card.getSuit() == Suit.HEARTS || card.getSuit() == Suit.DIAMONDS) {
-                // Set chosenByDealer attribute to true for the selected card
-                card.setChosenByDealer(true);
-                // Add the card to the dealer's hand
-                dealerHand.addCard(card);
+            // Loop through the cards the user picked
+            for (Card card : hand.getHand()) {
+                // Check if the card's suit is HEARTS or DIAMONDS
+                if (card.getSuit() == Suit.HEARTS || card.getSuit() == Suit.DIAMONDS) {
+                    // Set chosenByDealer attribute to true for the selected card
+                    card.setChosenByDealer(true);
+                    // Add the card to the dealer's hand
+                    dealerHand.addCard(card);
+                }
             }
-        }
 
-        // Return the dealer's hand
-        return dealerHand;
+            // Return the dealer's hand
+            return dealerHand;
+        }
     }
-}

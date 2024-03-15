@@ -106,7 +106,7 @@ public class Card {
     /**
      * @return Whether the card has been chosen by the dealer.
      */
-    public boolean getChosenByDealer(){
+    public boolean getChosenByDealer() {
         return chosenByDealer;
     }
 

@@ -8,10 +8,7 @@
 
 package main.view;
 
-import main.model.Card;
-import main.model.Hand;
-import main.model.Rank;
-import main.model.Suit;
+import main.model.*;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -37,14 +34,17 @@ public class GUI {
     private ActionListener dealButtonListener;
     private ActionListener quitButtonListener;
 
+    private final Deck deck;
+
     /**
      * The constructor is used to create the frame that is used throughout the game.
      */
-    public GUI() {
+    public GUI(Deck deck) {
         frame = new JFrame("Art Dealer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(800, 800);
         frame.setLocationRelativeTo(null);
+        this.deck = deck;
     }
 
     /**
@@ -244,13 +244,12 @@ public class GUI {
      * Display's a window, allowing the user to select which cards to be added to his hand.
      * @return An array of cards to be added to the user's hand.
      */
-public Card[] displayChoice() {
+public Hand displayChoice() {
     // Arrays for the suits and ranks
     String[] suits = {"CLUBS", "DIAMONDS", "HEARTS", "SPADES"};
     String[] ranks = {"ACE", "TWO", "THREE", "FOUR", "FIVE", "SIX", "SEVEN",
             "EIGHT", "NINE", "TEN", "JACK", "QUEEN", "KING"};
-    Card[] userHand = new Card[4];
-    Hand hand = new Hand();
+    Hand userHand = new Hand();
 
     for (int i = 0; i < 4; i++) {
         JComboBox<String> suitComboBox = new JComboBox<>(suits);
@@ -280,37 +279,34 @@ public Card[] displayChoice() {
                 Suit suitToEnum = Suit.valueOf(selectedSuit);
                 Rank rankToEnum = Rank.valueOf(selectedRank);
                 // https://www.w3schools.com/java/java_classes.asp
-                Card card = new Card(rankToEnum, suitToEnum);
+                Card card = deck.getCard(rankToEnum, suitToEnum);
                 // Check if the card is already selected
-                if (!selectedCardsSet.contains(card)) {
-                    // Add the selected card to the list and set
-                    userHand[i] = card;
-                    hand.addCard(card);
-                    displayHand(hand);
-                    selectedCardsSet.add(card);
+                if (!userHand.getHand().contains(card)) {
+                    // Add the selected card to the hand
+                    userHand.addCard(card);
+                    displayHand(userHand);
 
                 } else {
                     // Display a message or handle the case where the same card is selected again
-                    int alreadyPicked = JOptionPane.showConfirmDialog(null, panel, "You already selected this card. Please try again.",
-                            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "You already selected this card. Please pick a new card.");
                     i--; // Decrement the loop counter to prompt the user for the same position again
                 }
 
                 // Add the selected card to the list
-                userHand[i] = new Card(rankToEnum, suitToEnum);
             } catch (IllegalArgumentException e) {
                 System.out.println("There was an error " + e);
+                JOptionPane.showMessageDialog(null, "Invalid selection. Please try again.");
+                i--;
             }
         } else {
             System.out.println("User canceled the selection.");
+            JOptionPane.showMessageDialog(null, "User canceled the selection.");
             // Clearing the selected cards
-            selectedCardsSet.clear();
-            hand.clear();
-            displayHand(hand);
+            userHand.clear();
+            displayHand(userHand);
             return null;
         }
     }
-    selectedCardsSet.clear();
     return userHand;
 }
 

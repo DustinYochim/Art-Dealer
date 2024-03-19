@@ -46,7 +46,7 @@ import main.view.GUI;
 public class App {
     public static void main(String[] args) {
         Deck deck = new Deck(); // initialize deck
-        GUI gui = new GUI(); // initialize GUI
+        GUI gui = new GUI(deck); // initialize GUI
         GameController controller = new GameController(deck, gui); // controller will need deck and GUI to control flow
         gui.startApp(); // this starts the GUI
     }

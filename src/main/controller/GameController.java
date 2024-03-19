@@ -63,17 +63,17 @@ public class GameController {
      * It also writes the current hand to the external log file.
      */
     private void dealCards() {
-        Hand hand = new Hand();
-        Card[] userHand = gui.displayChoice(); // Get an array of cards from the user using the GUI
+        Hand hand = gui.displayChoice();
+        // Card[] userHand = gui.displayChoice(); // Get an array of cards from the user using the GUI
 
         /*
             If the array of cards is not empty, add them to the user's hand, display them on the screen,
             display them in the external log file and the in-game log.
          */
-        if (userHand != null) {
-            for (Card card : userHand) {
-                hand.addCard(card);
-            }
+        if (hand != null) {
+            // for (Card card : hand.getHand()) {
+            //     hand.addCard(card);
+            // }
             Hand dealerHand = dealerChooseCards(hand);
             gui.displayPrevious(hand.format_hand_for_logger()) ;
             File.writeToFile(hand.format_hand_for_logger());
@@ -82,8 +82,10 @@ public class GameController {
         }
 
         // Reset chosenByDealer attributes to false for all cards in the hand
-        for (Card card : hand.getHand()) {
-            card.setChosenByDealer(false);
+        if (hand != null) {
+            for (Card card : hand.getHand()) {
+                card.setChosenByDealer(false);
+            }
         }
     }
 

@@ -103,6 +103,8 @@ public class Card {
     public Suit getSuit() {
         return this.suit;
     }
+
+    public Rank getRank() { return this.rank; }
     /**
      * @return Whether the card has been chosen by the dealer.
      */

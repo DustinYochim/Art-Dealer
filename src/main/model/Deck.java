@@ -24,6 +24,17 @@ public class Deck {
         initializeDeck();
     }
 
+    public Card getCard(Rank rank, Suit suit) {
+        Card foundCard = null;
+        for (Card card : this.cards) {
+            if (card.getRank().equals(rank) && card.getSuit().equals(suit)) {
+                foundCard = card;
+                break;
+            }
+        }
+        return foundCard;
+    }
+
     /**
      * Uses the Rank and Suit enums to initialize a deck of cards.
      */

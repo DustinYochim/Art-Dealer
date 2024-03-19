@@ -42,7 +42,7 @@ public class GUI {
     public GUI(Deck deck) {
         frame = new JFrame("Art Dealer");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 800);
+        frame.setSize(900, 900);
         frame.setLocationRelativeTo(null);
         this.deck = deck;
     }

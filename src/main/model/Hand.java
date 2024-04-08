@@ -55,4 +55,15 @@ public class Hand {
     public void clear() {
         cards.clear();
     }
+
+    public Rank findHighestRank() {
+        Rank highestRank = null;
+        for (Card card : cards) {
+            if (highestRank == null || card.getRank().compareTo(highestRank) > 0) {
+                highestRank = card.getRank();
+            }
+        }
+        return highestRank;
+    }
+
 }

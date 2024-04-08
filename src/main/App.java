@@ -1,5 +1,6 @@
 /*
- Art Dealer was written by Dustin Yochim, Ellis Twiggs Jr, Jonathan Schweighauser, Adam Loepker, and Yosef Alqufidi
+ Art Dealer was written in Java using IntelliJ by Dustin Yochim, Ellis Twiggs Jr, Jonathan Schweighauser, Adam Loepker,
+ and Yosef Alqufidi
  in Spring 2024 Semester as part of the Introduction to Software Profession class at the University of Missouri - Saint
  Louis.
 

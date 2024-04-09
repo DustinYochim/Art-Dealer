@@ -11,7 +11,9 @@ package main.view;
 import main.model.*;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.Objects;
@@ -29,7 +31,9 @@ public class GUI {
     // Data Attributes
     private final JFrame frame;
     private JPanel cardPanel;
+    private JPanel dealerCardPanel;
     private JPanel previousCards;
+    private JLabel roundLabel;
     private ActionListener startButtonListener;
     private ActionListener dealButtonListener;
     private ActionListener quitButtonListener;
@@ -139,25 +143,64 @@ public class GUI {
         return descriptionLabel;
     }
 
+    public void updateRoundNumber(int roundNumber) {
+        roundLabel.setText("Round " + roundNumber);
+    }
+
 
     /**
      * Creates and displays the main game window.
      */
-    public void showGameScreen() {
+    public void showGameScreen(int roundNumber) {
         JPanel gameScreenPanel = new JPanel(new BorderLayout());
 
+        // Round Panel
+        JPanel roundPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        roundLabel = new JLabel("Round " + roundNumber);
+        roundLabel.setFont(new Font("Arial", Font.BOLD, 32));
+        roundPanel.add(roundLabel);
+        roundPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
+        gameScreenPanel.add(roundPanel, BorderLayout.NORTH);
+
+
         // Card Panel
+        JPanel cardPanelAndHeading = new JPanel(new BorderLayout());
+
+        JLabel cardPanelHeading = new JLabel("Your Hand");
+        cardPanelHeading.setFont(new Font("Arial", Font.BOLD, 24));
+        cardPanelHeading.setBorder(new EmptyBorder(20, 0, 0, 0));
+        cardPanelHeading.setHorizontalAlignment(SwingConstants.CENTER);
+
+        cardPanelAndHeading.add(cardPanelHeading, BorderLayout.NORTH);
+
         cardPanel = new JPanel(new FlowLayout());
-        cardPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
-        gameScreenPanel.add(cardPanel, BorderLayout.CENTER);
+        cardPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
+        cardPanelAndHeading.add(cardPanel, BorderLayout.CENTER);
+        gameScreenPanel.add(cardPanelAndHeading, BorderLayout.CENTER);
+
+        cardPanel = new JPanel(new FlowLayout());
+        cardPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
+        cardPanelAndHeading.add(cardPanel, BorderLayout.CENTER);
+        gameScreenPanel.add(cardPanelAndHeading, BorderLayout.CENTER);
+
+        cardPanel = new JPanel(new FlowLayout());
+        cardPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
+        cardPanelAndHeading.add(cardPanel, BorderLayout.CENTER);
+        gameScreenPanel.add(cardPanelAndHeading, BorderLayout.CENTER);
+
         // Previous Cards
         previousCards = new JPanel();
         JLabel heading = new JLabel("Previous Hands");
-        heading.setFont(new Font("Arial", Font.BOLD, 12));
+        heading.setFont(new Font("Arial", Font.BOLD, 18));
         previousCards.add(heading);
         previousCards.setLayout(new BoxLayout(previousCards, BoxLayout.Y_AXIS));
-        previousCards.setBorder(new EmptyBorder(10, 10, 10, 10));
+        // previousCards.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.BLACK));
+        previousCards.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(0, 0, 0, 1, Color.BLACK), // Right border
+                BorderFactory.createEmptyBorder(10, 10, 10, 10) // Padding
+        ));
         JScrollPane previousCardsScroll = new JScrollPane(previousCards);
+        previousCardsScroll.setBorder(null);
         gameScreenPanel.add(previousCardsScroll, BorderLayout.WEST);
 
         // Button Panel
@@ -168,7 +211,10 @@ public class GUI {
         JButton quitButton = new JButton("Quit");
         buttonPanel.add(quitButton);
 
-        buttonPanel.setBorder(new EmptyBorder(0, 0, 20, 0));
+        buttonPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK), // Right border
+                BorderFactory.createEmptyBorder(0, 0, 20, 0) // Padding
+        ));
 
         /*
         Once again, the action listeners for the buttons return flow to the game controller rather than handling them
@@ -192,6 +238,12 @@ public class GUI {
         frame.getContentPane().add(gameScreenPanel); // Add new components defined in gameScreenPanel
         frame.revalidate(); // Re-validate the frame
         frame.repaint(); // Repaint the frame
+    }
+
+    public void clearCardPanel() {
+        cardPanel.removeAll();
+        cardPanel.revalidate();
+        cardPanel.repaint();
     }
 
     /**
@@ -237,6 +289,18 @@ public class GUI {
         previousCards.add(label);
         previousCards.revalidate();
         previousCards.repaint();
+    }
+
+    public void announceWin(int currentWins, int requiredWins) {
+        String message;
+
+        if (currentWins < requiredWins) {
+            message = "Congratulations! You won this time!\n";
+            message += "You have " + currentWins + " out of " + requiredWins + " wins required to move on to the next round.";
+        } else {
+            message = "You've beat this round. Let's see if you can figure out this next one.";
+        }
+        JOptionPane.showMessageDialog(frame, message);
     }
 
     // Authored by Ellis Twiggs Jr
@@ -365,4 +429,28 @@ public Hand displayChoice() {
         exitTimer.start();
     }
 
+    public void displayCurrentRound() {
+    }
+
+    public void showSameHandWarning() {
+        String message = "Nice try. You'll have to select a unique hand to win this round.";
+        JOptionPane.showMessageDialog(frame, message);
+    }
+
+    public void displayGameResult(String s) {
+        JOptionPane.showMessageDialog(frame, s);
+    }
+
+    public int displayRestartOption() {
+        String[] options = {"Restart", "Quit"};
+        int choice = JOptionPane.showOptionDialog(frame,
+                "You won the game! Do you want to restart?",
+                "Congratulations!",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                options,
+                options[0]);
+        return choice + 1; // Returning 1 for "Restart" and 2 for "Quit"
+    }
 }

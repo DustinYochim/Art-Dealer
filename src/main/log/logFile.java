@@ -16,10 +16,10 @@ import java.util.logging.Logger;
 /**
  * The File class is used to log the dealt hands to an external file.
  */
-public class File {
+public class logFile {
     private static BufferedWriter writer;
 
-    private static final Logger LOGGER = Logger.getLogger(File.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(logFile.class.getName());
 
     /**
      * Opens the log file for appending.

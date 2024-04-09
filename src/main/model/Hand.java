@@ -3,7 +3,7 @@
  */
 package main.model;
 
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  * The Hand class is used to represent a hand of cards. It includes methods for adding cards to the hand,
@@ -56,6 +56,28 @@ public class Hand {
         cards.clear();
     }
 
+    public void sortHand() {
+        Collections.sort(cards, (card1, card2) -> {
+            if (card1.getRank() != card2.getRank()) {
+                return card1.getRank().compareTo(card2.getRank());
+            } else {
+                return card1.getSuit().compareTo(card2.getSuit());
+            }
+        });
+    }
+
+    public boolean isUnique(List<Hand> otherHands) {
+        Set<Card> uniqueCards = new HashSet<>(cards);
+        for (Hand hand : otherHands) {
+            for (Card card : hand.getHand()) {
+                if (uniqueCards.contains(card)) {
+                    return false; // Found a duplicate card
+                }
+            }
+        }
+        return true; // No duplicate cards found
+    }
+
     public Rank findHighestRank() {
         Rank highestRank = null;
         for (Card card : cards) {
@@ -65,5 +87,6 @@ public class Hand {
         }
         return highestRank;
     }
+
 
 }

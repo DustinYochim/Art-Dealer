@@ -154,15 +154,15 @@ public class GameController {
 
                 if (dealerHand.getHand().size() == 4) {
                     currentRoundWins++;
-                    gui.announceWin(currentRoundWins, 2);
+
                     gui.clearCardPanel();
                     if (currentRoundWins == 2) {
                         if (currentRound == 6) {
                             // User wins the game
-                            gui.displayGameResult("Congratulations! You won the game!");
+                            LastWonFile.reset();
+                            // gui.displayGameResult("Congratulations! You won the game!");
                             int option = gui.displayRestartOption();
                             if (option == 1) {
-                                LastWonFile.reset();
                                 restartGame();
                                 return; // Exit the method to avoid further execution
                             } else {
@@ -171,6 +171,7 @@ public class GameController {
                             }
                         } else {
                             // User wins the round, increment current round and reset wins counter
+                            gui.announceWin(currentRoundWins, 2);
                             incrementCurrentRound();
                             gui.updateRoundNumber(currentRound);
                             LastWonFile.saveRoundNumber();

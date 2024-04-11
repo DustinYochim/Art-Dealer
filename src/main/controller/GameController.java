@@ -154,9 +154,10 @@ public class GameController {
 
                 if (dealerHand.getHand().size() == 4) {
                     currentRoundWins++;
-
                     gui.clearCardPanel();
                     if (currentRoundWins == 2) {
+                        gui.displayPrevious("USER WON PATTERN " + currentRound);
+                        logFile.writeToFile("USER WON PATTERN " + currentRound);
                         if (currentRound == 6) {
                             // User wins the game
                             LastWonFile.reset();
@@ -178,6 +179,8 @@ public class GameController {
                             currentRoundWins = 0;
                             usedHands.clear();
                         }
+                    } else {
+                        gui.announceWin(currentRoundWins, 2);
                     }
                 }
             } else {
@@ -187,7 +190,7 @@ public class GameController {
             gui.showSameHandWarning(); // Inform the user that the hand has already been used
         }
 
-        gui.clearCardPanel();
+        // gui.clearCardPanel();
 
         // Reset chosenByDealer attributes to false for all cards in the hand
         if (hand != null) {

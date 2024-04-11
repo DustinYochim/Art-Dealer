@@ -31,6 +31,10 @@ public class GameController {
 
     private int currentRoundWins = 0;
 
+    final int WINS_REQUIRED_FOR_NEXT_ROUND = 2;
+    final int TOTAL_ROUNDS = 6;
+    final int COMPLETE_HAND_SIZE = 4;
+
 
     /**
      * The Constructor initializes the action listeners.
@@ -139,11 +143,17 @@ public class GameController {
      * It also writes the current hand to the external log file.
      */
     private void dealCards() {
+
         gui.displayCurrentRound();
         Hand hand = gui.displayChoice();
 
+        // If the hand is empty just return
+        if (hand == null) {
+            return;
+        }
+
         // Check if the hand has already been used
-        if (hand != null && !usedHands.contains(hand)) {
+        if (!usedHands.contains(hand)) {
             if (isUniqueHand(hand)) {
                 Hand dealerHand = chooseCardsBasedOnCurrentPattern(currentRound, hand);
                 gui.displayPrevious(hand.format_hand_for_logger());
@@ -152,36 +162,8 @@ public class GameController {
 
                 usedHands.add(hand);
 
-                if (dealerHand.getHand().size() == 4) {
-                    currentRoundWins++;
-                    gui.clearCardPanel();
-                    if (currentRoundWins == 2) {
-                        gui.displayPrevious("USER WON PATTERN " + currentRound);
-                        logFile.writeToFile("USER WON PATTERN " + currentRound);
-                        if (currentRound == 6) {
-                            // User wins the game
-                            LastWonFile.reset();
-                            // gui.displayGameResult("Congratulations! You won the game!");
-                            int option = gui.displayRestartOption();
-                            if (option == 1) {
-                                restartGame();
-                                return; // Exit the method to avoid further execution
-                            } else {
-                                quitGame(); // Quit the game
-                                return; // Exit the method to avoid further execution
-                            }
-                        } else {
-                            // User wins the round, increment current round and reset wins counter
-                            gui.announceWin(currentRoundWins, 2);
-                            incrementCurrentRound();
-                            gui.updateRoundNumber(currentRound);
-                            LastWonFile.saveRoundNumber();
-                            currentRoundWins = 0;
-                            usedHands.clear();
-                        }
-                    } else {
-                        gui.announceWin(currentRoundWins, 2);
-                    }
+                if (dealerHand.getHand().size() == COMPLETE_HAND_SIZE) { // dealer chose all 4 cards
+                    handleUserScore();
                 }
             } else {
                 gui.showSameHandWarning();
@@ -190,13 +172,50 @@ public class GameController {
             gui.showSameHandWarning(); // Inform the user that the hand has already been used
         }
 
-        // gui.clearCardPanel();
-
         // Reset chosenByDealer attributes to false for all cards in the hand
-        if (hand != null) {
-            for (Card card : hand.getHand()) {
-                card.setChosenByDealer(false);
-            }
+        for (Card card : hand.getHand()) {
+            card.setChosenByDealer(false);
+        }
+    }
+
+    private void handleUserScore() {
+        currentRoundWins++;
+        if (currentRoundWins == WINS_REQUIRED_FOR_NEXT_ROUND) {
+            handleRoundWin();
+        } else {
+            gui.announceWin(currentRoundWins, WINS_REQUIRED_FOR_NEXT_ROUND);
+        }
+    }
+
+    private void handleRoundWin() {
+        gui.displayPrevious("USER WON PATTERN " + currentRound);
+        logFile.writeToFile("USER WON PATTERN " + currentRound);
+        if (currentRound == TOTAL_ROUNDS) {
+            handleGameWin();
+        } else {
+            // User wins the round, increment current round and reset wins counter
+            gui.announceWin(currentRoundWins, WINS_REQUIRED_FOR_NEXT_ROUND);
+            incrementCurrentRound();
+            gui.updateRoundNumber(currentRound);
+            LastWonFile.saveRoundNumber();
+            currentRoundWins = 0;
+            usedHands.clear();
+            gui.clearCardPanel();
+        }
+
+    }
+
+    private void handleGameWin() {
+        // User wins the game
+        LastWonFile.reset();
+        // gui.displayGameResult("Congratulations! You won the game!");
+        int option = gui.displayRestartOption();
+        if (option == 1) {
+            restartGame();
+            return; // Exit the method to avoid further execution
+        } else {
+            quitGame(); // Quit the game
+            return; // Exit the method to avoid further execution
         }
     }
 

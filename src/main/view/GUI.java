@@ -145,6 +145,10 @@ public class GUI {
         return descriptionLabel;
     }
 
+    /**
+     * Takes in the current round number and updates the round display
+     * @param roundNumber the current round of the game
+     */
     public void updateRoundNumber(int roundNumber) {
         roundLabel.setText("Round " + roundNumber);
     }
@@ -242,6 +246,9 @@ public class GUI {
         frame.repaint(); // Repaint the frame
     }
 
+    /**
+     * Clears the card display
+     */
     public void clearCardPanel() {
         cardPanel.removeAll();
         cardPanel.revalidate();
@@ -293,6 +300,11 @@ public class GUI {
         previousCards.repaint();
     }
 
+    /**
+     * announces a win, and gives info about required wins to advance
+     * @param currentWins the users current wins
+     * @param requiredWins the required wins to advance to the next round
+     */
     public void announceWin(int currentWins, int requiredWins) {
         String message;
 
@@ -434,6 +446,9 @@ public Hand displayChoice() {
     public void displayCurrentRound() {
     }
 
+    /**
+     * Warn user that they have used this hand in this round already
+     */
     public void showSameHandWarning() {
         String message = "Nice try. You'll have to select a unique hand to win this round.";
         JOptionPane.showMessageDialog(frame, message);
@@ -443,6 +458,9 @@ public Hand displayChoice() {
         JOptionPane.showMessageDialog(frame, s);
     }
 
+    /**
+     * @return the user's choice of restarting (1) or quitting (2)
+     */
     public int displayRestartOption() {
         String[] options = {"Restart", "Quit"};
         int choice = JOptionPane.showOptionDialog(frame,

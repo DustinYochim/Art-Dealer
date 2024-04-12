@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 /**
@@ -23,17 +22,22 @@ import java.util.stream.Collectors;
  */
 public class GameController {
 
+    /******************************* START OF CLASS ATTRIBUTES **********************************************/
     private final GUI gui;
 
-    final int NUM_CARDS_TO_DEAL = 4;
+    final int HAND_SIZE = 4; // the size of a user's hand
 
-    private int currentRound;
+    private int currentRound; // used to keep track of the user's current round
 
-    private int currentRoundWins = 0;
+    private int currentRoundWins = 0; // used to keep track of wins in current round, 2 required
 
-    final int WINS_REQUIRED_FOR_NEXT_ROUND = 2;
-    final int TOTAL_ROUNDS = 6;
-    final int COMPLETE_HAND_SIZE = 4;
+    final int WINS_REQUIRED_FOR_NEXT_ROUND = 2; // number of wins required to advance to next round
+    final int TOTAL_ROUNDS = 6; // in HW4 there are 6 total rounds
+
+    private final Set<Hand> usedHands = new HashSet<>(); // used to keep track of hands in a round
+
+    /******************************* END OF CLASS ATTRIBUTES **********************************************/
+
 
 
     /**
@@ -50,104 +54,37 @@ public class GameController {
         this.gui = gui;
 
         // listeners in GUI return flow back here so that we can control the game flow
-        this.gui.addStartButtonListener(e -> startGame());
-        this.gui.addDealButtonListener(e -> dealCards());
-        this.gui.addQuitButtonListener(e -> quitGame());
+        this.gui.addStartButtonListener(e -> handleStartGameButtonClick());
+        this.gui.addDealButtonListener(e -> handlePickCardsButtonClick());
+        this.gui.addQuitButtonListener(e -> handleQuitGameButtonClick());
     }
 
-    public int getCurrentRound() {return currentRound;}
-    private void incrementCurrentRound() {currentRound++;}
-
-
+    /******************************* START OF BUTTON CLICK HANDLERS **********************************************/
     /**
-     * startGame() is called whenever the user clicks the start button in the welcome screen.
-     * Once clicked, the main game screen is loaded and the log file is opened to prepare
-     * for the writing of cards.
+     * handleStartGameButtonClick() is called whenever the user clicks the start button in the welcome screen.
+     * Once clicked, the game is started.
      */
-    private void startGame() {
-
-        // check if save data exists
-        if (saveFileExists()) {
-            int lastRoundWon = readRound();
-            currentRound = lastRoundWon + 1;
-        } else {
-            currentRound = 1;
-        }
-        gui.showGameScreen(getCurrentRound());
-        logFile.openFile();
-    }
-
-    private boolean saveFileExists() {
-        File saveFile = new File("LastWon.txt");
-        return saveFile.exists();
-    }
-
-    private int readRound() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("LastWon.txt"));
-            String line = reader.readLine();
-            reader.close();
-            return Integer.parseInt(line);
-        } catch(IOException | NumberFormatException e) {
-            e.printStackTrace();
-            return 1;
-        }
+    private void handleStartGameButtonClick() {
+        startGame();
     }
 
     /**
-     * quitGame() is used to end the program. It closes the log file and displays the goodbye screen.
+     * handleQuitGame() is called whenever the user clicks the quit button, and it calls the quitGame method.
      */
-    private void quitGame() {
-        logFile.closeFile();
-        gui.showGoodbyeScreen();
-    }
-
-
-
-    private final Set<Hand> usedHands = new HashSet<>();
-
-    private boolean isUniqueHand(Hand currentHand) {
-        for (Hand usedHand : usedHands) {
-            if (areHandsEqual(currentHand, usedHand)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean areHandsEqual(Hand hand1, Hand hand2) {
-        List<Card> cards1 = hand1.getHand();
-        List<Card> cards2 = hand2.getHand();
-
-        if (cards1.size() != cards2.size()) {
-            return false;
-        }
-
-        for (Card card : cards1) {
-            if (!cards2.contains(card)) {
-                return false;
-            }
-        }
-
-        for (Card card : cards2) {
-            if (!cards1.contains(card)) {
-                return false;
-            }
-        }
-
-        return true;
+    private void handleQuitGameButtonClick() {
+        quitGame();
     }
 
     /**
-     * dealCards() deals cards into a user's hand and display's the cards in the GUI.
-     * It also writes the current hand to the external log file.
+     * handlePickCardsButtonClick() gets the card choices from the user, verifies uniqueness, updates the display,
+     * and handles whether the user scores or not.
      */
-    private void dealCards() {
+    private void handlePickCardsButtonClick() {
 
         gui.displayCurrentRound();
         Hand hand = gui.displayChoice();
 
-        // If the hand is empty just return
+        // If the hand is empty (user canceled selection) just return
         if (hand == null) {
             return;
         }
@@ -162,7 +99,7 @@ public class GameController {
 
                 usedHands.add(hand);
 
-                if (dealerHand.getHand().size() == COMPLETE_HAND_SIZE) { // dealer chose all 4 cards
+                if (dealerHand.getHand().size() == HAND_SIZE) { // dealer chose all 4 cards
                     handleUserScore();
                 }
             } else {
@@ -178,6 +115,38 @@ public class GameController {
         }
     }
 
+    /******************************* END OF BUTTON CLICK HANDLERS **********************************************/
+
+    /*
+    startGame loads the save data (if exists), shows the game screen, and opens the log file for writing.
+     */
+    private void startGame() {
+        loadSaveData();
+        gui.showGameScreen(getCurrentRound());
+        logFile.openFile();
+    }
+
+    /**
+     * restartGame resets the round, wins, and userHand and then start's game over
+     */
+    private void restartGame() {
+        currentRound = 1;
+        currentRoundWins = 0;
+        usedHands.clear();
+        startGame();
+    }
+
+    /**
+     * quitGame() closes the log file and shows the goodbye screen
+     */
+    private void quitGame() {
+        logFile.closeFile();
+        gui.showGoodbyeScreen();
+    }
+
+    /**
+     * handleUserScore increments the currentRoundsWins and determines if user advances to next round or not
+     */
     private void handleUserScore() {
         currentRoundWins++;
         if (currentRoundWins == WINS_REQUIRED_FOR_NEXT_ROUND) {
@@ -187,6 +156,10 @@ public class GameController {
         }
     }
 
+    /**
+     * handleRoundWin() updates the GUI and log file for a user winning a round. If the user wins the last round, it
+     * also calls the handleGameWin() method.
+     */
     private void handleRoundWin() {
         gui.displayPrevious("USER WON PATTERN " + currentRound);
         logFile.writeToFile("USER WON PATTERN " + currentRound);
@@ -205,28 +178,25 @@ public class GameController {
 
     }
 
+    /**
+     * handleGameWin() resets the game data and gives the user the option to play again or to quit
+     */
     private void handleGameWin() {
-        // User wins the game
         LastWonFile.reset();
-        // gui.displayGameResult("Congratulations! You won the game!");
         int option = gui.displayRestartOption();
+
         if (option == 1) {
             restartGame();
-            return; // Exit the method to avoid further execution
         } else {
-            quitGame(); // Quit the game
-            return; // Exit the method to avoid further execution
+            quitGame();
         }
     }
 
-    private void restartGame() {
-        currentRound = 1;
-        currentRoundWins = 0;
-        usedHands.clear();
-        startGame();
-    }
-
-
+    /**
+     * @param pattern the current round is used to determine the pattern
+     * @param userHand the user's current hand
+     * @return the dealer's choices based on picking cards from the user hand using the correct pattern
+     */
     private Hand chooseCardsBasedOnCurrentPattern(int pattern, Hand userHand) {
         return switch (pattern) {
             case 2 -> patternTwo(userHand);
@@ -238,91 +208,15 @@ public class GameController {
         };
     }
 
-
-    private Hand patternSix(Hand userHand) {
-        Hand dealerHand = new Hand();
-
-        Rank highestRank = userHand.findHighestRank();
-
-        // Loop through the cards the user picked
-        for (Card card : userHand.getHand()) {
-            // Check if the card's suit is HEARTS or DIAMONDS
-            if (card.getRank() == highestRank) {
-                // Set chosenByDealer attribute to true for the selected card
-                card.setChosenByDealer(true);
-                // Add the card to the dealer's hand
-                dealerHand.addCard(card);
-            }
-        }
-
-        // Return the dealer's hand
-        return dealerHand;
-    }
-
-    private Hand patternFive(Hand userHand) {
-        Hand dealerHand = new Hand();
-
-        // Loop through the cards the user picked
-        for (Card card : userHand.getHand()) {
-            // Check if the card's suit is HEARTS or DIAMONDS
-            if (card.getRank() == Rank.TWO || card.getRank() == Rank.THREE
-                    || card.getRank() == Rank.FIVE || card.getRank() == Rank.SEVEN) {
-                // Set chosenByDealer attribute to true for the selected card
-                card.setChosenByDealer(true);
-                // Add the card to the dealer's hand
-                dealerHand.addCard(card);
-            }
-        }
-
-        // Return the dealer's hand
-        return dealerHand;
-    }
-
-    private Hand patternFour(Hand userHand) {
-        Hand dealerHand = new Hand();
-
-        // Loop through the cards the user picked
-        for (Card card : userHand.getHand()) {
-            // Check if the card's suit is HEARTS or DIAMONDS
-            if (card.getRank() == Rank.TWO || card.getRank() == Rank.THREE || card.getRank() == Rank.FOUR
-            || card.getRank() == Rank.FIVE || card.getRank() == Rank.SIX || card.getRank() == Rank.SEVEN
-            || card.getRank() == Rank.EIGHT || card.getRank() == Rank.NINE) {
-                // Set chosenByDealer attribute to true for the selected card
-                card.setChosenByDealer(true);
-                // Add the card to the dealer's hand
-                dealerHand.addCard(card);
-            }
-        }
-
-        // Return the dealer's hand
-        return dealerHand;
-    }
-
-    private Hand patternThree(Hand userHand) {
-        Hand dealerHand = new Hand();
-
-        // Loop through the cards the user picked
-        for (Card card : userHand.getHand()) {
-            // Check if the card's suit is HEARTS or DIAMONDS
-            if (card.getRank() == Rank.KING || card.getRank() == Rank.QUEEN || card.getRank() == Rank.JACK ) {
-                // Set chosenByDealer attribute to true for the selected card
-                card.setChosenByDealer(true);
-                // Add the card to the dealer's hand
-                dealerHand.addCard(card);
-            }
-        }
-
-        // Return the dealer's hand
-        return dealerHand;
-    }
+    /***************************** START OF DEALER PATTERNS *******************************************/
 
     /**
      * patternOne() method selects cards from the user's hand if they are a red card.
-     *
+     * Written by Jonathon
      * @param hand The user's hand of cards.
      * @return The dealer's hand of selected cards.
      */
-        private Hand patternOne(Hand hand) {
+    private Hand patternOne(Hand hand) {
             Hand dealerHand = new Hand();
 
             // Loop through the cards the user picked
@@ -363,4 +257,193 @@ public class GameController {
         // Return the dealer's hand
         return dealerHand;
     }
+
+    /**
+     * @param userHand the user's selected hand
+     * @return The dealers choices consisting of All Face Cards - Kings, Queens, and Jacks
+     */
+    private Hand patternThree(Hand userHand) {
+        Hand dealerHand = new Hand();
+
+        // Loop through the cards the user picked
+        for (Card card : userHand.getHand()) {
+            // Check if the card's suit is HEARTS or DIAMONDS
+            if (card.getRank() == Rank.KING || card.getRank() == Rank.QUEEN || card.getRank() == Rank.JACK ) {
+                // Set chosenByDealer attribute to true for the selected card
+                card.setChosenByDealer(true);
+                // Add the card to the dealer's hand
+                dealerHand.addCard(card);
+            }
+        }
+
+        // Return the dealer's hand
+        return dealerHand;
+    }
+
+    /**
+     * @param userHand the user's selected hand
+     * @return the art dealers choices, consisting of all single digit cards (2,3,4,5,6,7,8,9)
+     */
+    private Hand patternFour(Hand userHand) {
+        Hand dealerHand = new Hand();
+
+        // Loop through the cards the user picked
+        for (Card card : userHand.getHand()) {
+            // Check if the card's suit is HEARTS or DIAMONDS
+            if (card.getRank() == Rank.TWO || card.getRank() == Rank.THREE || card.getRank() == Rank.FOUR
+                    || card.getRank() == Rank.FIVE || card.getRank() == Rank.SIX || card.getRank() == Rank.SEVEN
+                    || card.getRank() == Rank.EIGHT || card.getRank() == Rank.NINE) {
+                // Set chosenByDealer attribute to true for the selected card
+                card.setChosenByDealer(true);
+                // Add the card to the dealer's hand
+                dealerHand.addCard(card);
+            }
+        }
+
+        // Return the dealer's hand
+        return dealerHand;
+    }
+
+    /**
+     * @param userHand the user's selected cards
+     * @return the art dealers selections, consisting of all single digit primes - 2,3,5,7
+     */
+    private Hand patternFive(Hand userHand) {
+        Hand dealerHand = new Hand();
+
+        // Loop through the cards the user picked
+        for (Card card : userHand.getHand()) {
+            // Check if the card's suit is HEARTS or DIAMONDS
+            if (card.getRank() == Rank.TWO || card.getRank() == Rank.THREE
+                    || card.getRank() == Rank.FIVE || card.getRank() == Rank.SEVEN) {
+                // Set chosenByDealer attribute to true for the selected card
+                card.setChosenByDealer(true);
+                // Add the card to the dealer's hand
+                dealerHand.addCard(card);
+            }
+        }
+
+        // Return the dealer's hand
+        return dealerHand;
+    }
+
+    /**
+     * @param userHand the user's selected cards
+     * @return the art dealer selections, consisting of the highest rank cards from the current hand
+     */
+    private Hand patternSix(Hand userHand) {
+        Hand dealerHand = new Hand();
+
+        Rank highestRank = userHand.findHighestRank();
+
+        // Loop through the cards the user picked
+        for (Card card : userHand.getHand()) {
+            // Check if the card's suit is HEARTS or DIAMONDS
+            if (card.getRank() == highestRank) {
+                // Set chosenByDealer attribute to true for the selected card
+                card.setChosenByDealer(true);
+                // Add the card to the dealer's hand
+                dealerHand.addCard(card);
+            }
+        }
+
+        // Return the dealer's hand
+        return dealerHand;
+    }
+
+    /***************************** END OF DEALER PATTERNS *******************************************/
+
+
+    /***************************** START OF UTILITY METHODS *******************************************/
+
+    /**
+     * getCurrentRound() returns the current round the user is on.
+     * @return the current round
+     */
+    public int getCurrentRound() {return currentRound;}
+
+    /**
+     * incrementCurrentRound() increments the current round by 1.
+     */
+    private void incrementCurrentRound() {currentRound++;}
+
+    /**
+     * loads the save data from the LastWon.txt file
+     */
+    private void loadSaveData() {
+        // check if save data exists
+        if (saveFileExists()) {
+            int lastRoundWon = readRoundFromFile();
+            currentRound = lastRoundWon + 1;
+        } else {
+            currentRound = 1; // if save file does not exist default to round 1
+        }
+    }
+
+    /**
+     * @return whether the save file exists
+     */
+    private boolean saveFileExists() {
+        File saveFile = new File("LastWon.txt");
+        return saveFile.exists();
+    }
+
+    /**
+     * @return the Last Won round from the user coming from LastWon.txt
+     */
+    private int readRoundFromFile() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader("LastWon.txt"));
+            String line = reader.readLine();
+            reader.close();
+            return Integer.parseInt(line);
+        } catch(IOException | NumberFormatException e) {
+            e.printStackTrace();
+            return 1;
+        }
+    }
+
+    /**
+     * @param currentHand the user's current hand
+     * @return whether the hand exists in usedHands
+     */
+    private boolean isUniqueHand(Hand currentHand) {
+        for (Hand usedHand : usedHands) {
+            if (areHandsEqual(currentHand, usedHand)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @param hand1 a hand of cards
+     * @param hand2 another hand of cards
+     * @return whether the 2 hands are equal
+     */
+    private boolean areHandsEqual(Hand hand1, Hand hand2) {
+        List<Card> cards1 = hand1.getHand();
+        List<Card> cards2 = hand2.getHand();
+
+        if (cards1.size() != cards2.size()) {
+            return false;
+        }
+
+        for (Card card : cards1) {
+            if (!cards2.contains(card)) {
+                return false;
+            }
+        }
+
+        for (Card card : cards2) {
+            if (!cards1.contains(card)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /***************************** END OF UTILITY METHODS *******************************************/
+
     }

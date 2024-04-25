@@ -161,6 +161,7 @@ public class GameController {
      * also calls the handleGameWin() method.
      */
     private void handleRoundWin() {
+
         gui.displayPrevious("USER WON PATTERN " + currentRound);
         logFile.writeToFile("USER WON PATTERN " + currentRound);
         if (currentRound == TOTAL_ROUNDS) {
@@ -168,6 +169,12 @@ public class GameController {
         } else {
             // User wins the round, increment current round and reset wins counter
             gui.announceWin(currentRoundWins, WINS_REQUIRED_FOR_NEXT_ROUND);
+            try {
+                gui.playVictorySound();
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println("Error playing victory sound: " + e.getMessage());
+            }
             incrementCurrentRound();
             gui.updateRoundNumber(currentRound);
             LastWonFile.saveRoundNumber();

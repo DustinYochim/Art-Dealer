@@ -10,15 +10,20 @@ package main.view;
 
 import main.model.*;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Objects;
 import java.util.HashSet;
 import java.util.Set;
+import javax.sound.sampled.*;
 
 /**
  * The graphical user-interface for the application.
@@ -472,5 +477,24 @@ public Hand displayChoice() {
                 options,
                 options[0]);
         return choice + 1; // Returning 1 for "Restart" and 2 for "Quit"
+    }
+
+    public void playVictorySound()  {
+        try {
+            AudioInputStream sound =
+                    AudioSystem.getAudioInputStream(Objects.requireNonNull(GUI.class.getResourceAsStream(
+                            "/main/resources/sound/victory.wav")));
+
+            Clip c = AudioSystem.getClip();
+
+            c.open(sound);
+            c.start();
+            Thread.sleep(c.getMicrosecondLength() / 1000);
+
+            c.close();
+            sound.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

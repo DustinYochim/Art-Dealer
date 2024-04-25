@@ -46,7 +46,7 @@ public class LastWonFile {
     }
 
     /**
-     * Gets the current round number, incremements it, and then calls updateRoundNumber to update the file
+     * Gets the current round number, increments it, and then calls updateRoundNumber to update the file
      */
     public static void saveRoundNumber() {
         int currentRound = getCurrentRoundNumber();

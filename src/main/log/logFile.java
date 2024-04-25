@@ -55,7 +55,9 @@ public class logFile {
      */
     public static void closeFile(){
         try{
-            writer.close();
+            if (writer != null) {
+                writer.close();
+            }
         } catch (IOException e){
             LOGGER.log(Level.SEVERE, "Error closing file", e);
         }

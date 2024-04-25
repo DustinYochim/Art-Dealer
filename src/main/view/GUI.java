@@ -40,10 +40,17 @@ public class GUI {
     private JPanel previousCards;
     private JLabel roundLabel;
     private ActionListener startButtonListener;
+
+    private ActionListener howToPlayButtonListener;
     private ActionListener dealButtonListener;
     private ActionListener quitButtonListener;
+    private ActionListener backButtonListener;
 
     private final Deck deck;
+
+    private final Font bigFont = new Font("Arial", Font.BOLD, 18);
+    private final Font titleFont = new Font("Arial", Font.BOLD, 64);
+    private final Font buttonFont = new Font("Arial", Font.BOLD, 14);
 
     /**
      * The constructor is used to create the frame that is used throughout the game.
@@ -67,18 +74,19 @@ public class GUI {
      * Shows the welcome screen containing a title, logo, instructions for playing the game,
      * and a button for continuing.
      */
-    private void showWelcomeScreen() {
+    public void showWelcomeScreen() {
+        frame.getContentPane().removeAll();
         JPanel welcomeScreenPanel = new JPanel();
         welcomeScreenPanel.setLayout(new BorderLayout());
 
         // Description Section
-        JLabel gameDescriptionLabel = getjLabel(); // a method below that returns the content of the label
-        // gameDescriptionLabel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-        welcomeScreenPanel.add(gameDescriptionLabel, BorderLayout.NORTH);
+        // JLabel gameDescriptionLabel = getjLabel(); // a method below that returns the content of the label
+        // // gameDescriptionLabel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+        // welcomeScreenPanel.add(gameDescriptionLabel, BorderLayout.NORTH);
 
         // Welcome, Section
         JLabel welcomeMessageLabel = new JLabel("Welcome to Art Dealer!");
-        welcomeMessageLabel.setFont(new Font("Arial", Font.BOLD, 30));
+        welcomeMessageLabel.setFont(titleFont);
         ImageIcon cardLogo = new ImageIcon(Objects.requireNonNull(getClass().getResource("/main/resources/cardLogo.png")));
         welcomeMessageLabel.setHorizontalTextPosition(JLabel.CENTER);
         welcomeMessageLabel.setVerticalTextPosition(JLabel.TOP);
@@ -88,9 +96,20 @@ public class GUI {
 
         // Button Section
         JButton startButton = new JButton("Start Game");
+        startButton.setFont(buttonFont);
+
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         buttonPanel.add(startButton);
+
+        JButton howToPlayButton = new JButton("How to Play");
+        howToPlayButton.setFont(buttonFont);
+        buttonPanel.add(howToPlayButton);
+
+        // JButton quitButton = new JButton("Quit");
+        // quitButton.setFont(buttonFont);
+        // buttonPanel.add(quitButton);
+
         welcomeScreenPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         welcomeScreenPanel.setBorder(new EmptyBorder(10, 10, 40, 10));
@@ -101,6 +120,18 @@ public class GUI {
                 startButtonListener.actionPerformed(e);
             }
         });
+
+        howToPlayButton.addActionListener(e -> {
+            if (howToPlayButtonListener != null) {
+                howToPlayButtonListener.actionPerformed(e);
+            }
+        });
+
+        // quitButton.addActionListener(e -> {
+        //     if (quitButtonListener != null) {
+        //         quitButtonListener.actionPerformed(e);
+        //     }
+        // });
 
         /*
         once everything is added to the welcomeScreenPanel, add it to the main frame
@@ -217,9 +248,11 @@ public class GUI {
         // Button Panel
         JPanel buttonPanel = new JPanel(new FlowLayout());
         JButton dealButton = new JButton("Pick Cards");
+        dealButton.setFont(buttonFont);
         buttonPanel.add(dealButton);
 
         JButton quitButton = new JButton("Quit");
+        quitButton.setFont(buttonFont);
         buttonPanel.add(quitButton);
 
         buttonPanel.setBorder(BorderFactory.createCompoundBorder(
@@ -423,6 +456,10 @@ public Hand displayChoice() {
         quitButtonListener = listener;
     }
 
+    public void addHowToPlayButtonListener (ActionListener listener){
+        howToPlayButtonListener = listener;
+    }
+
 
     /**
      * Shows a goodbye screen for 5 seconds before terminating the program.
@@ -497,4 +534,43 @@ public Hand displayChoice() {
             e.printStackTrace();
         }
     }
+
+    public void showInstructionsScreen() {
+        frame.revalidate();
+        frame.repaint();
+        JPanel instructionsPanel = new JPanel();
+        instructionsPanel.setLayout(new BorderLayout());
+
+        JLabel gameDescriptionLabel = getjLabel(); // a method below that returns the content of the label
+        // // gameDescriptionLabel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
+        instructionsPanel.add(gameDescriptionLabel, BorderLayout.NORTH);
+
+        JPanel instructionsButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+
+        JButton backButton = new JButton("Back");
+        backButton.setFont(buttonFont);
+        instructionsButtonPanel.add(backButton);
+
+        instructionsPanel.add(instructionsButtonPanel, BorderLayout.SOUTH);
+
+        instructionsPanel.setBorder(new EmptyBorder(10, 10, 40, 10));
+
+        // Instead of handling events in the GUI, the flow is returned to the GameController
+
+        backButton.addActionListener(e -> {
+            if (backButtonListener != null) {
+                backButtonListener.actionPerformed(e);
+            }
+        });
+
+        /*
+        once everything is added to the welcomeScreenPanel, add it to the main frame
+         */
+        frame.getContentPane().removeAll();
+        frame.getContentPane().add(instructionsPanel);
+        frame.setVisible(true);
+    }
+
+
+    public void addBackButtonListener(ActionListener listener) { backButtonListener = listener;}
 }

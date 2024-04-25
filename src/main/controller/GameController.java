@@ -57,6 +57,16 @@ public class GameController {
         this.gui.addStartButtonListener(e -> handleStartGameButtonClick());
         this.gui.addDealButtonListener(e -> handlePickCardsButtonClick());
         this.gui.addQuitButtonListener(e -> handleQuitGameButtonClick());
+        this.gui.addHowToPlayButtonListener(e -> handleHowToPlayButtonClick());
+        this.gui.addBackButtonListener(e -> handleBackButtonClick());
+    }
+
+    private void handleBackButtonClick() {
+        gui.showWelcomeScreen();
+    }
+
+    private void handleHowToPlayButtonClick() {
+        gui.showInstructionsScreen();
     }
 
     /******************************* START OF BUTTON CLICK HANDLERS **********************************************/

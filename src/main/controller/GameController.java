@@ -32,7 +32,7 @@ public class GameController {
     private int currentRoundWins = 0; // used to keep track of wins in current round, 2 required
 
     final int WINS_REQUIRED_FOR_NEXT_ROUND = 2; // number of wins required to advance to next round
-    final int TOTAL_ROUNDS = 7; // in HW4 there are 6 total rounds
+    final int TOTAL_ROUNDS = 8; // in HW4 there are 6 total rounds
 
     private final Set<Hand> usedHands = new HashSet<>(); // used to keep track of hands in a round
 
@@ -222,6 +222,7 @@ public class GameController {
             case 5 -> patternFive(userHand);
             case 6 -> patternSix(userHand);
             case 7 -> patternSeven(userHand);
+            case 8 -> patternEight(userHand);
             default -> patternOne(userHand);
         };
     }
@@ -363,6 +364,31 @@ public class GameController {
                 card.setChosenByDealer(true);
                 dealerHand.addCard(card);
             }
+        }
+
+        // Return the dealer's hand
+        return dealerHand;
+    }
+
+    /**
+     * @param userHand the user's selected cards
+     * @return the art dealer selections, the user will select all four cards if and only if they are rising run in
+     * same suit
+     */
+    private Hand patternEight(Hand userHand) {
+        Hand dealerHand = new Hand();
+
+        userHand.sortHandByRank();
+
+        for (int i = 1; i < userHand.getHand().size(); i++) {
+            if (userHand.getHand().get(i).rank_to_int() - userHand.getHand().get(i - 1).rank_to_int() != 2) {
+                return dealerHand;
+            }
+        }
+
+        for (Card card : userHand.getHand()) {
+            card.setChosenByDealer(true);
+            dealerHand.addCard(card);
         }
 
         // Return the dealer's hand

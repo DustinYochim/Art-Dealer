@@ -66,6 +66,10 @@ public class Hand {
         });
     }
 
+    public void sortHandByRank() {
+        cards.sort(Comparator.comparing(Card::getRank));
+    }
+
     public boolean checkSameSuit() {
         Suit s = this.cards.getFirst().getSuit();
         for (Card card : cards) {

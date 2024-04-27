@@ -57,13 +57,34 @@ public class Hand {
     }
 
     public void sortHand() {
-        Collections.sort(cards, (card1, card2) -> {
+        cards.sort((card1, card2) -> {
             if (card1.getRank() != card2.getRank()) {
                 return card1.getRank().compareTo(card2.getRank());
             } else {
                 return card1.getSuit().compareTo(card2.getSuit());
             }
         });
+    }
+
+    public boolean checkSameSuit() {
+        Suit s = this.cards.getFirst().getSuit();
+        for (Card card : cards) {
+            if (card.getSuit() != s) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean checkRisingRank() {
+        Rank r = this.cards.getFirst().getRank();
+
+        for (int i = 1; i < cards.size(); i++) {
+            if ((cards.get(i).rank_to_int() - cards.get(i-1).rank_to_int() != 1)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public boolean isUnique(List<Hand> otherHands) {

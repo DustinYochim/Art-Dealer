@@ -32,7 +32,7 @@ public class GameController {
     private int currentRoundWins = 0; // used to keep track of wins in current round, 2 required
 
     final int WINS_REQUIRED_FOR_NEXT_ROUND = 2; // number of wins required to advance to next round
-    final int TOTAL_ROUNDS = 6; // in HW4 there are 6 total rounds
+    final int TOTAL_ROUNDS = 7; // in HW4 there are 6 total rounds
 
     private final Set<Hand> usedHands = new HashSet<>(); // used to keep track of hands in a round
 
@@ -221,6 +221,7 @@ public class GameController {
             case 4 -> patternFour(userHand);
             case 5 -> patternFive(userHand);
             case 6 -> patternSix(userHand);
+            case 7 -> patternSeven(userHand);
             default -> patternOne(userHand);
         };
     }
@@ -260,13 +261,9 @@ public class GameController {
     private Hand patternTwo(Hand hand) {
         Hand dealerHand = new Hand();
 
-        // Loop through the cards the user picked
         for (Card card : hand.getHand()) {
-            // Check if the card's suit is CLUBS
             if (card.getSuit() == Suit.CLUBS) {
-                // Set chosenByDealer attribute to true for the selected card
                 card.setChosenByDealer(true);
-                // Add the card to the dealer's hand
                 dealerHand.addCard(card);
             }
         }
@@ -282,13 +279,9 @@ public class GameController {
     private Hand patternThree(Hand userHand) {
         Hand dealerHand = new Hand();
 
-        // Loop through the cards the user picked
         for (Card card : userHand.getHand()) {
-            // Check if the card's suit is HEARTS or DIAMONDS
             if (card.getRank() == Rank.KING || card.getRank() == Rank.QUEEN || card.getRank() == Rank.JACK ) {
-                // Set chosenByDealer attribute to true for the selected card
                 card.setChosenByDealer(true);
-                // Add the card to the dealer's hand
                 dealerHand.addCard(card);
             }
         }
@@ -306,13 +299,10 @@ public class GameController {
 
         // Loop through the cards the user picked
         for (Card card : userHand.getHand()) {
-            // Check if the card's suit is HEARTS or DIAMONDS
             if (card.getRank() == Rank.TWO || card.getRank() == Rank.THREE || card.getRank() == Rank.FOUR
                     || card.getRank() == Rank.FIVE || card.getRank() == Rank.SIX || card.getRank() == Rank.SEVEN
                     || card.getRank() == Rank.EIGHT || card.getRank() == Rank.NINE) {
-                // Set chosenByDealer attribute to true for the selected card
                 card.setChosenByDealer(true);
-                // Add the card to the dealer's hand
                 dealerHand.addCard(card);
             }
         }
@@ -328,14 +318,10 @@ public class GameController {
     private Hand patternFive(Hand userHand) {
         Hand dealerHand = new Hand();
 
-        // Loop through the cards the user picked
         for (Card card : userHand.getHand()) {
-            // Check if the card's suit is HEARTS or DIAMONDS
             if (card.getRank() == Rank.TWO || card.getRank() == Rank.THREE
                     || card.getRank() == Rank.FIVE || card.getRank() == Rank.SEVEN) {
-                // Set chosenByDealer attribute to true for the selected card
                 card.setChosenByDealer(true);
-                // Add the card to the dealer's hand
                 dealerHand.addCard(card);
             }
         }
@@ -353,13 +339,28 @@ public class GameController {
 
         Rank highestRank = userHand.findHighestRank();
 
-        // Loop through the cards the user picked
         for (Card card : userHand.getHand()) {
-            // Check if the card's suit is HEARTS or DIAMONDS
             if (card.getRank() == highestRank) {
-                // Set chosenByDealer attribute to true for the selected card
                 card.setChosenByDealer(true);
-                // Add the card to the dealer's hand
+                dealerHand.addCard(card);
+            }
+        }
+
+        // Return the dealer's hand
+        return dealerHand;
+    }
+
+    /**
+     * @param userHand the user's selected cards
+     * @return the art dealer selections, the user will select all four cards if and only if they are rising run in
+     * same suit
+     */
+    private Hand patternSeven(Hand userHand) {
+        Hand dealerHand = new Hand();
+
+        if (userHand.checkSameSuit() && userHand.checkRisingRank()) {
+            for (Card card : userHand.getHand()) {
+                card.setChosenByDealer(true);
                 dealerHand.addCard(card);
             }
         }

@@ -50,7 +50,7 @@ public class GUI {
 
     private final Font bigFont = new Font("Arial", Font.BOLD, 18);
     private final Font titleFont = new Font("Arial", Font.BOLD, 64);
-    private final Font buttonFont = new Font("Arial", Font.BOLD, 14);
+    private final Font buttonFont = new Font("Arial", Font.PLAIN, 14);
 
     /**
      * The constructor is used to create the frame that is used throughout the game.

@@ -9,6 +9,7 @@ import main.log.logFile;
 import main.model.*;
 import main.view.GUI;
 
+import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -32,7 +33,7 @@ public class GameController {
     private int currentRoundWins = 0; // used to keep track of wins in current round, 2 required
 
     final int WINS_REQUIRED_FOR_NEXT_ROUND = 2; // number of wins required to advance to next round
-    final int TOTAL_ROUNDS = 8; // in HW4 there are 6 total rounds
+    final int TOTAL_ROUNDS = 12; // in HW4 there are 6 total rounds
 
     private final Set<Hand> usedHands = new HashSet<>(); // used to keep track of hands in a round
 
@@ -91,7 +92,6 @@ public class GameController {
      */
     private void handlePickCardsButtonClick() {
 
-        gui.displayCurrentRound();
         Hand hand = gui.displayChoice();
 
         // If the hand is empty (user canceled selection) just return
@@ -103,8 +103,10 @@ public class GameController {
         if (!usedHands.contains(hand)) {
             if (isUniqueHand(hand)) {
                 Hand dealerHand = chooseCardsBasedOnCurrentPattern(currentRound, hand);
-                gui.displayPrevious(hand.format_hand_for_logger());
-                logFile.writeToFile(hand.format_hand_for_logger());
+                if (currentRound != 9) {
+                    gui.displayPrevious(hand.format_hand_for_logger());
+                    logFile.writeToFile(hand.format_hand_for_logger());
+                }
                 gui.displayHand(hand);
 
                 usedHands.add(hand);
@@ -174,10 +176,11 @@ public class GameController {
 
         gui.displayPrevious("USER WON PATTERN " + currentRound);
         logFile.writeToFile("USER WON PATTERN " + currentRound);
-        if (currentRound == TOTAL_ROUNDS) {
+        if (currentRound >= TOTAL_ROUNDS) {
             handleGameWin();
         } else {
             // User wins the round, increment current round and reset wins counter
+
             gui.announceWin(currentRoundWins, WINS_REQUIRED_FOR_NEXT_ROUND);
             try {
                 gui.playVictorySound();
@@ -185,10 +188,12 @@ public class GameController {
                 e.printStackTrace();
                 System.err.println("Error playing victory sound: " + e.getMessage());
             }
-            incrementCurrentRound();
             gui.updateRoundNumber(currentRound);
+
+            incrementCurrentRound();
             LastWonFile.saveRoundNumber();
             currentRoundWins = 0;
+            gui.updateRoundNumber(currentRound);
             usedHands.clear();
             gui.clearCardPanel();
         }
@@ -223,6 +228,10 @@ public class GameController {
             case 6 -> patternSix(userHand);
             case 7 -> patternSeven(userHand);
             case 8 -> patternEight(userHand);
+            case 9 -> patternNine(userHand);
+            case 10 -> patternTen(userHand);
+            case 11 -> patternEleven(userHand);
+            case 12 -> patternTwelve(userHand);
             default -> patternOne(userHand);
         };
     }
@@ -394,6 +403,133 @@ public class GameController {
         // Return the dealer's hand
         return dealerHand;
     }
+
+    /**
+     * @param userHand the user's selected cards
+     * @return the art dealer selections, the user any combination of cards that add up to 11
+     */
+    private Hand patternNine(Hand userHand) {
+        Hand dealerHand = new Hand();
+
+        int[][] combinations = {
+                {0, 1, 2, 3}, // 1234
+                {0, 1, 2},    // 123
+                {1, 2, 3},    // 234
+                {0, 1, 3},    // 124
+                {0, 2, 3},    // 134
+                {0, 1},       // 12
+                {0, 2},       // 13
+                {0, 3},       // 14
+                {1, 2},       // 23
+                {1, 3},       // 24
+                {2, 3}        // 34
+        };
+
+        for (int[] combination : combinations) {
+            int total = 0;
+            dealerHand.clear();
+
+            for (int index : combination) {
+                Card card = userHand.getHand().get(index);
+                if (card.rank_to_int_ace_as_one() >= 1 && card.rank_to_int_ace_as_one() <= 10) {
+                    total += card.rank_to_int_ace_as_one();
+                    dealerHand.addCard(card);
+                } else {
+                    total = 0;
+                    break;
+                }
+            }
+
+            if (total == 11) {
+                for (Card card : dealerHand.getHand()) {
+                    card.setChosenByDealer(true);
+                }
+
+                gui.displayHand(userHand);
+                gui.announceSelectionPatternNine("The dealer bought: " + dealerHand.format_hand_for_logger());
+
+                gui.displayPrevious(userHand.format_hand_for_logger());
+                logFile.writeToFile(userHand.format_hand_for_logger());
+
+                for (Card card : dealerHand.getHand()) {
+                    card.setChosenByDealer(false);
+                }
+            }
+        }
+        return dealerHand;
+    }
+
+    private Hand patternTen(Hand userHand) {
+        Hand dealerHand = new Hand();
+
+        int aceCount = 0;
+        int eightCount = 0;
+
+        for (Card card : userHand.getHand()) {
+            if(card.getRank() == Rank.ACE) {
+                aceCount += 1;
+            }
+
+            if (card.getRank() == Rank.EIGHT) {
+                eightCount += 1;
+            }
+        }
+
+        if (aceCount == 2 && eightCount == 2) {
+            for (Card card : userHand.getHand()) {
+                card.setChosenByDealer(true);
+                dealerHand.addCard(card);
+            }
+        }
+        return dealerHand;
+    }
+
+    private Hand patternEleven(Hand userHand) {
+        Hand dealerHand = new Hand();
+        Suit startingSuit = userHand.getHand().getFirst().getSuit();
+
+        for (Card card : userHand.getHand()) {
+            if (card.getSuit() != startingSuit) {
+                return dealerHand;
+            }
+
+            if (card.getRank() != Rank.ACE && card.getRank() != Rank.KING
+            && card.getRank() != Rank.QUEEN && card.getRank() != Rank.JACK) {
+                return dealerHand;
+            }
+        }
+        for (Card card : userHand.getHand()) {
+            card.setChosenByDealer(true);
+            dealerHand.addCard(card);
+        }
+        return dealerHand;
+    }
+
+    private Hand patternTwelve(Hand userHand) {
+        Hand dealerHand = new Hand();
+
+        int blackJackCount = 0;
+        int aceCount = 0;
+
+        for (Card card : userHand.getHand()) {
+            if (card.getRank() == Rank.ACE) {
+                aceCount += 1;
+            }
+
+            if (card.getRank() == Rank.JACK && (card.getSuit() == Suit.CLUBS || card.getSuit() == Suit.SPADES)) {
+                blackJackCount += 1;
+            }
+        }
+
+        if (blackJackCount == 2 && aceCount == 2) {
+            for (Card card : userHand.getHand()) {
+                card.setChosenByDealer(true);
+                dealerHand.addCard(card);
+            }
+        }
+        return dealerHand;
+    }
+
 
     /***************************** END OF DEALER PATTERNS *******************************************/
 

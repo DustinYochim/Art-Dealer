@@ -48,9 +48,14 @@ public class GUI {
 
     private final Deck deck;
 
-    private final Font bigFont = new Font("Arial", Font.BOLD, 18);
-    private final Font titleFont = new Font("Arial", Font.BOLD, 64);
-    private final Font buttonFont = new Font("Arial", Font.PLAIN, 14);
+    private final Font bigFont = new Font("Serif", Font.BOLD, 18);
+    private final Font regFont = new Font("Serif", Font.BOLD, 14);
+    private final Font titleFont = new Font("Serif", Font.BOLD, 64);
+
+    private final Font buttonFont = new Font("Serif", Font.PLAIN, 14);
+    private final Color bg = new Color(53,101,77);
+
+    private final Color txt = new Color(255, 255, 255);
 
     /**
      * The constructor is used to create the frame that is used throughout the game.
@@ -78,6 +83,7 @@ public class GUI {
         frame.getContentPane().removeAll();
         JPanel welcomeScreenPanel = new JPanel();
         welcomeScreenPanel.setLayout(new BorderLayout());
+        welcomeScreenPanel.setBackground(new Color(53,101,77));
 
         // Description Section
         // JLabel gameDescriptionLabel = getjLabel(); // a method below that returns the content of the label
@@ -87,7 +93,10 @@ public class GUI {
         // Welcome, Section
         JLabel welcomeMessageLabel = new JLabel("Welcome to Art Dealer!");
         welcomeMessageLabel.setFont(titleFont);
-        ImageIcon cardLogo = new ImageIcon(Objects.requireNonNull(getClass().getResource("/main/resources/cardLogo.png")));
+        welcomeMessageLabel.setForeground(Color.white);
+
+        ImageIcon cardLogo =
+                new ImageIcon(Objects.requireNonNull(getClass().getResource("/main/resources/CardLogo.png")));
         welcomeMessageLabel.setHorizontalTextPosition(JLabel.CENTER);
         welcomeMessageLabel.setVerticalTextPosition(JLabel.TOP);
         welcomeMessageLabel.setIcon(cardLogo);
@@ -100,6 +109,7 @@ public class GUI {
 
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        buttonPanel.setBackground(bg);
         buttonPanel.add(startButton);
 
         JButton howToPlayButton = new JButton("How to Play");
@@ -145,7 +155,7 @@ public class GUI {
      */
     private static JLabel getjLabel() {
         JLabel descriptionLabel = new JLabel("<html>" +
-                 "<body>"
+                 "<body style=color:white; font-family: Serif>"
                 + "<h2>Welcome to \"The Art Dealer\" Game!</h2>"
                 + "<p>In this game, you'll be playing against the computer, known as the Art Dealer. Your goal is to discover all the patterns in each round to win the game!</p>"
                 + "<h3>Gameplay Instructions:</h3>"
@@ -195,11 +205,16 @@ public class GUI {
      */
     public void showGameScreen(int roundNumber) {
         JPanel gameScreenPanel = new JPanel(new BorderLayout());
+        gameScreenPanel.setBackground(bg);
+        gameScreenPanel.setForeground(txt);
 
         // Round Panel
         JPanel roundPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        roundPanel.setBackground(bg);
+        roundPanel.setForeground(txt);
         roundLabel = new JLabel("Round " + roundNumber);
-        roundLabel.setFont(new Font("Arial", Font.BOLD, 32));
+        roundLabel.setFont(bigFont);
+        roundLabel.setForeground(txt);
         roundPanel.add(roundLabel);
         roundPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
         gameScreenPanel.add(roundPanel, BorderLayout.NORTH);
@@ -207,9 +222,13 @@ public class GUI {
 
         // Card Panel
         JPanel cardPanelAndHeading = new JPanel(new BorderLayout());
+        cardPanelAndHeading.setForeground(txt);
+        cardPanelAndHeading.setBackground(bg);
 
         JLabel cardPanelHeading = new JLabel("Your Hand");
-        cardPanelHeading.setFont(new Font("Arial", Font.BOLD, 24));
+        cardPanelHeading.setFont(bigFont);
+        cardPanelHeading.setForeground(txt);
+        cardPanelHeading.setBackground(bg);
         cardPanelHeading.setBorder(new EmptyBorder(20, 0, 0, 0));
         cardPanelHeading.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -217,23 +236,29 @@ public class GUI {
 
         cardPanel = new JPanel(new FlowLayout());
         cardPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
+        cardPanel.setBackground(bg);
+        cardPanel.setForeground(txt);
         cardPanelAndHeading.add(cardPanel, BorderLayout.CENTER);
         gameScreenPanel.add(cardPanelAndHeading, BorderLayout.CENTER);
 
-        cardPanel = new JPanel(new FlowLayout());
-        cardPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
-        cardPanelAndHeading.add(cardPanel, BorderLayout.CENTER);
-        gameScreenPanel.add(cardPanelAndHeading, BorderLayout.CENTER);
-
-        cardPanel = new JPanel(new FlowLayout());
-        cardPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
-        cardPanelAndHeading.add(cardPanel, BorderLayout.CENTER);
-        gameScreenPanel.add(cardPanelAndHeading, BorderLayout.CENTER);
+        // cardPanel = new JPanel(new FlowLayout());
+        // cardPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
+        // cardPanelAndHeading.add(cardPanel, BorderLayout.CENTER);
+        // gameScreenPanel.add(cardPanelAndHeading, BorderLayout.CENTER);
+        //
+        // cardPanel = new JPanel(new FlowLayout());
+        // cardPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
+        // cardPanelAndHeading.add(cardPanel, BorderLayout.CENTER);
+        // gameScreenPanel.add(cardPanelAndHeading, BorderLayout.CENTER);
 
         // Previous Cards
         previousCards = new JPanel();
+        previousCards.setForeground(txt);
+        previousCards.setBackground(bg);
         JLabel heading = new JLabel("Previous Hands");
-        heading.setFont(new Font("Arial", Font.BOLD, 18));
+        heading.setBackground(bg);
+        heading.setForeground(txt);
+        heading.setFont(bigFont);
         previousCards.add(heading);
         previousCards.setLayout(new BoxLayout(previousCards, BoxLayout.Y_AXIS));
         // previousCards.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.BLACK));
@@ -242,11 +267,15 @@ public class GUI {
                 BorderFactory.createEmptyBorder(10, 10, 10, 10) // Padding
         ));
         JScrollPane previousCardsScroll = new JScrollPane(previousCards);
+        previousCardsScroll.setBackground(bg);
+        previousCardsScroll.setForeground(txt);
+        previousCardsScroll.setFont(regFont);
         previousCardsScroll.setBorder(null);
         gameScreenPanel.add(previousCardsScroll, BorderLayout.WEST);
 
         // Button Panel
         JPanel buttonPanel = new JPanel(new FlowLayout());
+        buttonPanel.setBackground(bg);
         JButton dealButton = new JButton("Pick Cards");
         dealButton.setFont(buttonFont);
         buttonPanel.add(dealButton);
@@ -332,10 +361,15 @@ public class GUI {
     public void displayPrevious(String cards){
         // Authored by Ellis Twiggs Jr
         JLabel label = new JLabel(cards);
+        label.setForeground(txt);
         label.setBorder(BorderFactory.createEmptyBorder());
         previousCards.add(label);
         previousCards.revalidate();
         previousCards.repaint();
+    }
+
+    public void announceSelectionPatternNine(String message) {
+        JOptionPane.showMessageDialog(frame, message);
     }
 
     /**
@@ -467,11 +501,15 @@ public Hand displayChoice() {
     public void showGoodbyeScreen () {
         // Goodbye Panel Setup
         JPanel goodbyeScreenPanel = new JPanel();
+        goodbyeScreenPanel.setBackground(bg);
+        goodbyeScreenPanel.setForeground(txt);
         goodbyeScreenPanel.setLayout(new BorderLayout());
 
         // Goodbye label setup
         JLabel goodbyeMessageLabel = new JLabel("Thanks for playing Art Dealer!");
-        goodbyeMessageLabel.setFont(new Font("Arial", Font.BOLD, 40));
+        goodbyeMessageLabel.setFont(titleFont);
+        goodbyeMessageLabel.setBackground(bg);
+        goodbyeMessageLabel.setForeground(txt);
         goodbyeMessageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         goodbyeScreenPanel.add(goodbyeMessageLabel, BorderLayout.CENTER);
 
@@ -485,8 +523,6 @@ public Hand displayChoice() {
         exitTimer.start();
     }
 
-    public void displayCurrentRound() {
-    }
 
     /**
      * Warn user that they have used this hand in this round already
@@ -540,12 +576,16 @@ public Hand displayChoice() {
         frame.repaint();
         JPanel instructionsPanel = new JPanel();
         instructionsPanel.setLayout(new BorderLayout());
+        instructionsPanel.setBackground(bg);
+        instructionsPanel.setForeground(Color.white);
 
         JLabel gameDescriptionLabel = getjLabel(); // a method below that returns the content of the label
+        gameDescriptionLabel.setForeground(txt);
         // // gameDescriptionLabel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
-        instructionsPanel.add(gameDescriptionLabel, BorderLayout.NORTH);
+        instructionsPanel.add(gameDescriptionLabel, BorderLayout.CENTER);
 
         JPanel instructionsButtonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        instructionsButtonPanel.setBackground(bg);
 
         JButton backButton = new JButton("Back");
         backButton.setFont(buttonFont);

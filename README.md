@@ -1,11 +1,11 @@
 # Art Dealer
 
-## Description
+## Introduction
 <!-- [Provide a brief description of the game, including its objective, gameplay mechanics, and any unique features.] -->
  Art Dealer is a card-based game, written in Java by Dustin Yochim, Ellis Twiggs Jr, Jonathan Schweighauser, Adam Loepker, and Yosef Alqufidi in the Spring 2024 Semester as part of the Introduction to Software Profession class at the University of Missouri - Saint
  Louis.
 
- ## Introduction
+ ## Description
  Welcome to Art Dealer, the thrilling card game where you go head-to-head against the computer, known as the "Art Dealer," in a battle of wits and pattern recognition. Your mission? Unravel the mystery behind the dealer's card selection pattern and outsmart them at their own game.
 
 In each round, you'll be presented with a challenge: pick four cards that you believe the Art Dealer will also choose. But beware, the dealer's selections are shrouded in secrecy, and it's up to you to decipher the pattern behind their choices.

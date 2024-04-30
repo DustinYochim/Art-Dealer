@@ -48,7 +48,7 @@ public class GUI {
 
     private final Deck deck;
 
-    private final Font bigFont = new Font("Serif", Font.BOLD, 18);
+    private final Font bigFont = new Font("Serif", Font.BOLD, 20);
     private final Font regFont = new Font("Serif", Font.BOLD, 14);
     private final Font titleFont = new Font("Serif", Font.BOLD, 64);
 
@@ -230,8 +230,12 @@ public class GUI {
         roundLabel.setForeground(txt);
         roundPanel.add(roundLabel);
         roundPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
-        gameScreenPanel.add(roundPanel, BorderLayout.NORTH);
+        // gameScreenPanel.add(roundPanel, BorderLayout.NORTH);
 
+
+        // Main area - includes Card display and Round Information
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.add(roundPanel, BorderLayout.NORTH);
 
         // Card Panel
         JPanel cardPanelAndHeading = new JPanel(new BorderLayout());
@@ -252,7 +256,8 @@ public class GUI {
         cardPanel.setBackground(bg);
         cardPanel.setForeground(txt);
         cardPanelAndHeading.add(cardPanel, BorderLayout.CENTER);
-        gameScreenPanel.add(cardPanelAndHeading, BorderLayout.CENTER);
+        mainPanel.add(cardPanelAndHeading, BorderLayout.CENTER);
+        gameScreenPanel.add(mainPanel, BorderLayout.CENTER);
 
         // cardPanel = new JPanel(new FlowLayout());
         // cardPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
@@ -274,7 +279,7 @@ public class GUI {
         heading.setFont(bigFont);
         previousCards.add(heading);
         previousCards.setLayout(new BoxLayout(previousCards, BoxLayout.Y_AXIS));
-        // previousCards.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.BLACK));
+        previousCards.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, Color.BLACK));
         previousCards.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createMatteBorder(0, 0, 0, 1, Color.BLACK), // Right border
                 BorderFactory.createEmptyBorder(10, 10, 10, 10) // Padding

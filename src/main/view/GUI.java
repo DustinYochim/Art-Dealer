@@ -91,12 +91,13 @@ public class GUI {
         // welcomeScreenPanel.add(gameDescriptionLabel, BorderLayout.NORTH);
 
         // Welcome, Section
-        JLabel welcomeMessageLabel = new JLabel("Welcome to Art Dealer!");
+        // JLabel welcomeMessageLabel = new JLabel("Welcome to Art Dealer!");
+        JLabel welcomeMessageLabel = new JLabel();
         welcomeMessageLabel.setFont(titleFont);
         welcomeMessageLabel.setForeground(Color.white);
 
         ImageIcon cardLogo =
-                new ImageIcon(Objects.requireNonNull(getClass().getResource("/main/resources/CardLogo.png")));
+                new ImageIcon(Objects.requireNonNull(getClass().getResource("/main/resources/ad_logo.png")));
         welcomeMessageLabel.setHorizontalTextPosition(JLabel.CENTER);
         welcomeMessageLabel.setVerticalTextPosition(JLabel.TOP);
         welcomeMessageLabel.setIcon(cardLogo);
@@ -505,13 +506,34 @@ public Hand displayChoice() {
         goodbyeScreenPanel.setForeground(txt);
         goodbyeScreenPanel.setLayout(new BorderLayout());
 
+        // JLabel welcomeMessageLabel = new JLabel("Welcome to Art Dealer!");
+        // JLabel welcomeMessageLabel = new JLabel();
+        // welcomeMessageLabel.setFont(titleFont);
+        // welcomeMessageLabel.setForeground(Color.white);
+        //
+        // ImageIcon cardLogo =
+        //         new ImageIcon(Objects.requireNonNull(getClass().getResource("/main/resources/ad_logo.png")));
+        // welcomeMessageLabel.setHorizontalTextPosition(JLabel.CENTER);
+        // welcomeMessageLabel.setVerticalTextPosition(JLabel.TOP);
+        // welcomeMessageLabel.setIcon(cardLogo);
+        // welcomeMessageLabel.setHorizontalAlignment(JLabel.CENTER);
+        // welcomeScreenPanel.add(welcomeMessageLabel, BorderLayout.CENTER);
+
         // Goodbye label setup
-        JLabel goodbyeMessageLabel = new JLabel("Thanks for playing Art Dealer!");
+        JLabel goodbyeMessageLabel = new JLabel("Thanks for playing");
         goodbyeMessageLabel.setFont(titleFont);
         goodbyeMessageLabel.setBackground(bg);
         goodbyeMessageLabel.setForeground(txt);
         goodbyeMessageLabel.setHorizontalAlignment(SwingConstants.CENTER);
         goodbyeScreenPanel.add(goodbyeMessageLabel, BorderLayout.CENTER);
+        ImageIcon cardLogo = new ImageIcon(Objects.requireNonNull(getClass().getResource("/main/resources/ad_logo.png")));
+        goodbyeMessageLabel.setHorizontalTextPosition(JLabel.CENTER);
+        goodbyeMessageLabel.setVerticalTextPosition(JLabel.TOP);
+        goodbyeMessageLabel.setIcon(cardLogo);
+        goodbyeMessageLabel.setHorizontalAlignment(JLabel.CENTER);
+
+        goodbyeScreenPanel.add(goodbyeMessageLabel, BorderLayout.CENTER);
+
 
         frame.getContentPane().removeAll(); // remove previous content from the frame
         frame.getContentPane().add(goodbyeScreenPanel);

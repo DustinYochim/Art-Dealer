@@ -71,7 +71,7 @@ public class Hand {
     }
 
     public boolean checkSameSuit() {
-        Suit s = this.cards.getFirst().getSuit();
+        Suit s = this.cards.get(0).getSuit();
         for (Card card : cards) {
             if (card.getSuit() != s) {
                 return false;
@@ -81,7 +81,7 @@ public class Hand {
     }
 
     public boolean checkRisingRank() {
-        Rank r = this.cards.getFirst().getRank();
+        Rank r = this.cards.get(0).getRank();
 
         for (int i = 1; i < cards.size(); i++) {
             if ((cards.get(i).rank_to_int() - cards.get(i-1).rank_to_int() != 1)) {

@@ -487,7 +487,7 @@ public class GameController {
 
     private Hand patternEleven(Hand userHand) {
         Hand dealerHand = new Hand();
-        Suit startingSuit = userHand.getHand().getFirst().getSuit();
+        Suit startingSuit = userHand.getHand().get(0).getSuit();
 
         for (Card card : userHand.getHand()) {
             if (card.getSuit() != startingSuit) {

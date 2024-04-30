@@ -5,25 +5,28 @@
  Art Dealer is a card-based game, written in Java by Dustin Yochim, Ellis Twiggs Jr, Jonathan Schweighauser, Adam Loepker, and Yosef Alqufidi in the Spring 2024 Semester as part of the Introduction to Software Profession class at the University of Missouri - Saint
  Louis.
 
- ## Iterations
-### Homework 1
- The program lets you deal out 4 cards and then will show you your hand, and log your hand in a separate file, you can continue to draw cards or quit the program.
+ ## Introduction
+ Welcome to Art Dealer, the thrilling card game where you go head-to-head against the computer, known as the "Art Dealer," in a battle of wits and pattern recognition. Your mission? Unravel the mystery behind the dealer's card selection pattern and outsmart them at their own game.
 
- ### Homework 2
- Now the program lets you pick your cards, rather than the cards being randomly dealt to you. This iteration also adds the history of your previous hands to the display on the game screen.
+In each round, you'll be presented with a challenge: pick four cards that you believe the Art Dealer will also choose. But beware, the dealer's selections are shrouded in secrecy, and it's up to you to decipher the pattern behind their choices.
 
-  ### Homework 3
-  This iteration enhances the game by immediately displaying each card as the user makes a selection. The Art Dealer, represented by the program, selects cards based on a predefined pattern: choosing red cards (hearts or diamonds) while avoiding black cards (spades or clubs). The user can continue to pick four cards per round, with the program displaying the selections and waiting for the user's decision to continue or stop. Selected cards, along with the Art Dealer's picks are added to the user's history for reference.
+Successfully match the dealer's picks and earn a point. Rack up two points, and you'll advance to the next round, where a new and even more perplexing pattern awaits.
+
+Do you have what it takes to outmaneuver the Art Dealer and emerge victorious in this captivating game of strategy and deduction? It's time to find out in Art Dealer!
 
  ## Screenshots
  ### Welcome Screen
- <img width="912" alt="Screenshot 2024-03-05 at 12 30 52 PM" src="https://github.com/DustinYochim/Art-Dealer/assets/70305015/c3281024-f00e-4f05-88b4-7e016656e3bc">
+ <img width="1012" alt="Screenshot 2024-04-30 at 11 40 38 AM" src="https://github.com/DustinYochim/Art-Dealer/assets/70305015/dd6d05b7-4ff5-4f3b-98bd-a9e659099977">
+
+ ### Instructions Screen
+ <img width="1012" alt="Screenshot 2024-04-30 at 11 41 16 AM" src="https://github.com/DustinYochim/Art-Dealer/assets/70305015/3f7b0c88-bfdb-452f-961f-7d61aac7e017">
 
  ### Game Screen
- <img width="912" alt="Screenshot 2024-03-05 at 12 32 19 PM" src="https://github.com/DustinYochim/Art-Dealer/assets/70305015/c9ab2868-4f14-4ea4-8bbc-c5b31b996f81">
+ <img width="1012" alt="Screenshot 2024-04-30 at 11 42 02 AM" src="https://github.com/DustinYochim/Art-Dealer/assets/70305015/1587bab2-b57e-47c8-b34a-ed61bc11bc5a">
+
 
  ### Goodbye Screen
-<img width="912" alt="Screenshot 2024-03-05 at 12 32 23 PM" src="https://github.com/DustinYochim/Art-Dealer/assets/70305015/2dce4c70-4558-4cdd-b441-c386a647dd83">
+<img width="1012" alt="Screenshot 2024-04-30 at 11 42 06 AM" src="https://github.com/DustinYochim/Art-Dealer/assets/70305015/17ba74d0-6d43-47a2-b837-cbfd05717959">
 
 ## Programmers Guide
 1. To run the program, clone the repository from https://github.com/DustinYochim/Art-Dealer down to your local machine.
@@ -33,23 +36,19 @@
 5. Once you have the program open in your IDE and have selected App.java as the "Main" class. Click the "Run" option in your IDE to start the App!
 
 ## How to Play
-1. Press the “Start Game” button after clicking the .exe file to begin.
-2. Click on the “Pick Cards” button to start drawing cards. You can do this multiple times.
-3. When you want to stop playing, click the quit button.
+### Selection Process
+1. You will pick four cards, one by one.
+2. Each time you make a selection, the program will display the chosen card immediately.
+3. If you attempt to pick a card that has already been chosen in the current round, you’ll receive an error message and be asked to choose another card.
+4. If you attempt to pick the same 4 cards more than once in a round you will be forced to pick your cards again.
 
-<!--
-## Features
-- [List the main features of the game, such as different game modes, multiplayer support, etc.]
-- [Add more features as needed]
+### Round Structure
+1. After you pick four cards, the Art Dealer will make its selection based on a predetermined pattern.
+2. The Art Dealer’s selections will be displayed to you with a red border, indicating which cards it has chosen.
+3. You can choose to continue playing more rounds or stop the program altogether.
 
+### History Display
+1. All selected cards, along with an indication of which cards were chosen by the Art Dealer, will be added to the history.
+2. Cards denoted with a * were chosen by the dealer.
+3. You can view the history to keep track of your progress.
 
-## Usage
-1. [Explain how to run the game, including any command-line arguments or configuration options.]
-2. [Provide basic instructions on how to play the game.]
-3. [Include any additional tips or shortcuts for the player.]
-
-## Development
-- [Explain the project structure and organization.]
-- [List any external libraries or frameworks used in the development.]
-- [Provide instructions for developers who want to contribute to the project.]
--->

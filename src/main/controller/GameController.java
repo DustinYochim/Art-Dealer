@@ -134,7 +134,7 @@ public class GameController {
      */
     private void startGame() {
         loadSaveData();
-        gui.showGameScreen(getCurrentRound());
+        gui.showGameScreen(getCurrentRound(), currentRoundWins, WINS_REQUIRED_FOR_NEXT_ROUND);
         logFile.openFile();
     }
 
@@ -161,6 +161,7 @@ public class GameController {
      */
     private void handleUserScore() {
         currentRoundWins++;
+        gui.updateRoundNumber(currentRound, currentRoundWins, WINS_REQUIRED_FOR_NEXT_ROUND);
         if (currentRoundWins == WINS_REQUIRED_FOR_NEXT_ROUND) {
             handleRoundWin();
         } else {
@@ -188,12 +189,12 @@ public class GameController {
                 e.printStackTrace();
                 System.err.println("Error playing victory sound: " + e.getMessage());
             }
-            gui.updateRoundNumber(currentRound);
+            gui.updateRoundNumber(currentRound, currentRoundWins, WINS_REQUIRED_FOR_NEXT_ROUND);
 
             incrementCurrentRound();
             LastWonFile.saveRoundNumber();
             currentRoundWins = 0;
-            gui.updateRoundNumber(currentRound);
+            gui.updateRoundNumber(currentRound, currentRoundWins, WINS_REQUIRED_FOR_NEXT_ROUND);
             usedHands.clear();
             gui.clearCardPanel();
         }

@@ -196,15 +196,17 @@ public class GUI {
      * Takes in the current round number and updates the round display
      * @param roundNumber the current round of the game
      */
-    public void updateRoundNumber(int roundNumber) {
-        roundLabel.setText("Round " + roundNumber);
+    public void updateRoundNumber(int roundNumber, int currentWins, int requiredWins) {
+        roundLabel.setText("Round " + roundNumber + " : " + currentWins + "/" + requiredWins);
+        roundLabel.repaint();
+        roundLabel.revalidate();
     }
 
 
     /**
      * Creates and displays the main game window.
      */
-    public void showGameScreen(int roundNumber) {
+    public void showGameScreen(int roundNumber, int currentWins, int requiredWins) {
         JPanel gameScreenPanel = new JPanel(new BorderLayout());
         gameScreenPanel.setBackground(bg);
         gameScreenPanel.setForeground(txt);
@@ -213,7 +215,7 @@ public class GUI {
         JPanel roundPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         roundPanel.setBackground(bg);
         roundPanel.setForeground(txt);
-        roundLabel = new JLabel("Round " + roundNumber);
+        roundLabel = new JLabel("Round " + roundNumber + " : " + currentWins + "/" + requiredWins);
         roundLabel.setFont(bigFont);
         roundLabel.setForeground(txt);
         roundPanel.add(roundLabel);
@@ -506,18 +508,6 @@ public Hand displayChoice() {
         goodbyeScreenPanel.setForeground(txt);
         goodbyeScreenPanel.setLayout(new BorderLayout());
 
-        // JLabel welcomeMessageLabel = new JLabel("Welcome to Art Dealer!");
-        // JLabel welcomeMessageLabel = new JLabel();
-        // welcomeMessageLabel.setFont(titleFont);
-        // welcomeMessageLabel.setForeground(Color.white);
-        //
-        // ImageIcon cardLogo =
-        //         new ImageIcon(Objects.requireNonNull(getClass().getResource("/main/resources/ad_logo.png")));
-        // welcomeMessageLabel.setHorizontalTextPosition(JLabel.CENTER);
-        // welcomeMessageLabel.setVerticalTextPosition(JLabel.TOP);
-        // welcomeMessageLabel.setIcon(cardLogo);
-        // welcomeMessageLabel.setHorizontalAlignment(JLabel.CENTER);
-        // welcomeScreenPanel.add(welcomeMessageLabel, BorderLayout.CENTER);
 
         // Goodbye label setup
         JLabel goodbyeMessageLabel = new JLabel("Thanks for playing");

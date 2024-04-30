@@ -560,10 +560,10 @@ public class GameController {
     }
 
 
-    /***************************** END OF DEALER PATTERNS *******************************************/
+    /**************************** END OF DEALER PATTERNS *******************************************/
 
 
-    /***************************** START OF UTILITY METHODS *******************************************/
+    /**************************** START OF UTILITY METHODS *******************************************/
 
     /**
      * getCurrentRound() returns the current round the user is on.

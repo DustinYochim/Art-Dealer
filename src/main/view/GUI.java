@@ -156,9 +156,17 @@ public class GUI {
      */
     private static JLabel getjLabel() {
         JLabel descriptionLabel = new JLabel("<html>" +
-                 "<body style=color:white; font-family: Serif>"
-                + "<h2>Welcome to \"The Art Dealer\" Game!</h2>"
-                + "<p>In this game, you'll be playing against the computer, known as the Art Dealer. Your goal is to discover all the patterns in each round to win the game!</p>"
+                 "<body style=color:white; font-family: serif>"
+                + "<h2>Introduction</h2>"
+                + "<p>Welcome to Art Dealer, the thrilling card game where you go head-to-head against the computer, " +
+                "known as the \"Art Dealer,\" in a battle of wits and pattern recognition. Your mission? Unravel the " +
+                "mystery behind the dealer's card selection pattern and outsmart them at their own game.</p>" + "<br>"
+                + "<p>In each round, you'll be presented with a challenge: pick four cards that you believe the Art " +
+                "Dealer will also choose. But beware, the dealer's selections are shrouded in secrecy, and it's up to" +
+                " you to decipher the pattern behind their choices.<p>" + "<br>"
+                + "Successfully match the dealer's picks and earn a point. Rack up two points, and you'll advance to the next round, where a new and even more perplexing pattern awaits."
+                + "Do you have what it takes to outmaneuver the Art Dealer and emerge victorious in this captivating " +
+                "game of strategy and deduction? It's time to find out in Art Dealer!" + "<br>"
                 + "<h3>Gameplay Instructions:</h3>"
                 + "<ol>"
                 + "<li><strong>Selection Process:</strong>"
@@ -166,22 +174,24 @@ public class GUI {
                 + "<li>You will pick four cards, one by one.</li>"
                 + "<li>Each time you make a selection, the program will display the chosen card immediately.</li>"
                 + "<li>If you attempt to pick a card that has already been chosen in the current round, you'll receive an error message and be asked to choose another card.</li>"
+                + "<li>If you attempt to pick the same 4 cards more than once in a round you will be forced to pick " +
+                "your cards again.</li>"
                 + "</ul>"
                 + "</li>"
                 + "<li><strong>Round Structure:</strong>"
                 + "<ul>"
                 + "<li>After you pick four cards, the Art Dealer will make its selection based on a predetermined pattern.</li>"
-                + "<li>The Art Dealer will select the cards for that specific round, you will have to figure out what the pattern for that round is.</li>"
+                + "<li>The Art Dealer's selections will be displayed to you with a red border, indicating which cards" +
+                " it has chosen.</li>"
                 +"<li>In order to progress in the rounds you must match the pattern twice.</li>"
-                + "<li>The Art Dealer's selections will be displayed to you, indicating which cards it has chosen.</li>"
                 + "<li>You can choose to continue playing more rounds or stop the program altogether.</li>"
                 + "</ul>"
                 + "</li>"
                 + "<li><strong>History Display:</strong>"
                 + "<ul>"
                 + "<li>All selected cards, along with an indication of which cards were chosen by the Art Dealer, will be added to the history.</li>"
-                + "<li>You can view the history, likely in a scrollable window, to keep track of your progress.</li>"
-                +"<li>If you choose to stop playing in any of the rounds, it will automatically save in an external file.</li>"
+                + "<li>Cards denoted with a * were chosen by the dealer.</li>"
+                +"<li>You can view the history to keep track of your progress.</li>"
                 + "</ul>"
                 + "</li>"
                 + "</ol>"

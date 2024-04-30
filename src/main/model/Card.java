@@ -83,6 +83,9 @@ public class Card {
         };
     }
 
+    /**
+     * @return converts a cards rank to an integer value, Ace as 14
+     */
     public int rank_to_int() {
         return switch (rank) {
             case ACE -> 14;
@@ -101,6 +104,9 @@ public class Card {
         };
     }
 
+    /**
+     * @return converts a cards rank to an integer value, this method represents an Ace as a 1
+     */
     public int rank_to_int_ace_as_one() {
         return switch (rank) {
             case ACE -> 1;
@@ -140,6 +146,9 @@ public class Card {
         return this.suit;
     }
 
+    /**
+     * @return the rank of the current card
+     */
     public Rank getRank() { return this.rank; }
     /**
      * @return Whether the card has been chosen by the dealer.

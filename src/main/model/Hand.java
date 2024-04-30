@@ -52,24 +52,24 @@ public class Hand {
         return sb.toString();
     }
 
+    /**
+     * removes all cards from the hand
+     */
     public void clear() {
         cards.clear();
     }
 
-    public void sortHand() {
-        cards.sort((card1, card2) -> {
-            if (card1.getRank() != card2.getRank()) {
-                return card1.getRank().compareTo(card2.getRank());
-            } else {
-                return card1.getSuit().compareTo(card2.getSuit());
-            }
-        });
-    }
-
+    /**
+     * sorts a hand of cards by rank
+     */
     public void sortHandByRank() {
+        // https://www.baeldung.com/java-8-comparator-comparing
         cards.sort(Comparator.comparing(Card::getRank));
     }
 
+    /**
+     * @return true or false depending on if all cards in the hand are of the same suit
+     */
     public boolean checkSameSuit() {
         Suit s = this.cards.get(0).getSuit();
         for (Card card : cards) {
@@ -80,6 +80,9 @@ public class Hand {
         return true;
     }
 
+    /**
+     * @return true or false depending on if the card hand contains a rising rank
+     */
     public boolean checkRisingRank() {
         Rank r = this.cards.get(0).getRank();
 
@@ -91,18 +94,9 @@ public class Hand {
         return true;
     }
 
-    public boolean isUnique(List<Hand> otherHands) {
-        Set<Card> uniqueCards = new HashSet<>(cards);
-        for (Hand hand : otherHands) {
-            for (Card card : hand.getHand()) {
-                if (uniqueCards.contains(card)) {
-                    return false; // Found a duplicate card
-                }
-            }
-        }
-        return true; // No duplicate cards found
-    }
-
+    /**
+     * @return the highest ranked card in a hand of cards
+     */
     public Rank findHighestRank() {
         Rank highestRank = null;
         for (Card card : cards) {

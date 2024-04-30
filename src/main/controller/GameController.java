@@ -62,15 +62,25 @@ public class GameController {
         this.gui.addBackButtonListener(e -> handleBackButtonClick());
     }
 
+
+
+    /******************************* START OF BUTTON CLICK HANDLERS **********************************************/
+
+    /**
+     * This method is called whenever the user clicks the back button on the instructions screen and returns the user
+     * to the welcome screen
+     */
     private void handleBackButtonClick() {
         gui.showWelcomeScreen();
     }
 
+    /**
+     * this method is called when the user clicks the how to play button and shows them the game instructions screen
+     */
     private void handleHowToPlayButtonClick() {
         gui.showInstructionsScreen();
     }
 
-    /******************************* START OF BUTTON CLICK HANDLERS **********************************************/
     /**
      * handleStartGameButtonClick() is called whenever the user clicks the start button in the welcome screen.
      * Once clicked, the game is started.
@@ -181,7 +191,6 @@ public class GameController {
             handleGameWin();
         } else {
             // User wins the round, increment current round and reset wins counter
-
             gui.announceWin(currentRoundWins, WINS_REQUIRED_FOR_NEXT_ROUND);
             try {
                 gui.playVictorySound();
@@ -363,7 +372,7 @@ public class GameController {
 
     /**
      * @param userHand the user's selected cards
-     * @return the art dealer selections, the user will select all four cards if and only if they are rising run in
+     * @return the art dealer selections, the dealer will select all four cards if and only if they are rising run in
      * same suit
      */
     private Hand patternSeven(Hand userHand) {
@@ -382,8 +391,8 @@ public class GameController {
 
     /**
      * @param userHand the user's selected cards
-     * @return the art dealer selections, the user will select all four cards if and only if they are rising run in
-     * same suit
+     * @return the art dealer selections, the dealer will sort the cards by rank and then select all cards only if
+     * their rank always differs by 2
      */
     private Hand patternEight(Hand userHand) {
         Hand dealerHand = new Hand();
@@ -407,11 +416,12 @@ public class GameController {
 
     /**
      * @param userHand the user's selected cards
-     * @return the art dealer selections, the user any combination of cards that add up to 11
+     * @return the art dealer selections, the dealer will select any combination of cards that add up to 11
      */
     private Hand patternNine(Hand userHand) {
         Hand dealerHand = new Hand();
 
+        // This is used to make up the different combinations of cards that we are going to add up and test their total
         int[][] combinations = {
                 {0, 1, 2, 3}, // 1234
                 {0, 1, 2},    // 123
@@ -426,10 +436,12 @@ public class GameController {
                 {2, 3}        // 34
         };
 
+        // loop through each combination
         for (int[] combination : combinations) {
             int total = 0;
             dealerHand.clear();
 
+            // for each combination add the rank to the total
             for (int index : combination) {
                 Card card = userHand.getHand().get(index);
                 if (card.rank_to_int_ace_as_one() >= 1 && card.rank_to_int_ace_as_one() <= 10) {
@@ -441,6 +453,7 @@ public class GameController {
                 }
             }
 
+            // if the total ends being 11 then the dealer selects those cards and alerts the user
             if (total == 11) {
                 for (Card card : dealerHand.getHand()) {
                     card.setChosenByDealer(true);
@@ -460,6 +473,11 @@ public class GameController {
         return dealerHand;
     }
 
+    /**
+     * @param userHand the user's selected cards
+     * @return the art dealers selections, the dealer will select all four cards only if they are exactly 2 eights
+     * and 2 aces
+     */
     private Hand patternTen(Hand userHand) {
         Hand dealerHand = new Hand();
 
@@ -485,6 +503,11 @@ public class GameController {
         return dealerHand;
     }
 
+    /**
+     * @param userHand the user's selected cards
+     * @return the art dealers selections, the dealer will select all four cards only if they are an ace, king,
+     * queen, and jack in the same suit
+     */
     private Hand patternEleven(Hand userHand) {
         Hand dealerHand = new Hand();
         Suit startingSuit = userHand.getHand().get(0).getSuit();
@@ -506,6 +529,11 @@ public class GameController {
         return dealerHand;
     }
 
+    /**
+     * @param userHand the user's selected cards
+     * @return the dealer's selections, the dealer will select all four cards if and only if the cards contain 2
+     * jacks and any 2 aces
+     */
     private Hand patternTwelve(Hand userHand) {
         Hand dealerHand = new Hand();
 

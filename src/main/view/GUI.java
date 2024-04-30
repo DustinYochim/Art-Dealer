@@ -12,50 +12,40 @@ import main.model.*;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.util.Objects;
-import java.util.HashSet;
-import java.util.Set;
 import javax.sound.sampled.*;
 
 /**
  * The graphical user-interface for the application.
  */
 public class GUI {
-    // https://www.w3schools.com/java/java_hashset.asp
-    // https://www.geeksforgeeks.org/set-in-java/
-    private final Set<Card> selectedCardsSet = new HashSet<>();
 
-    // Data Attributes
-    private final JFrame frame;
-    private JPanel cardPanel;
-    private JPanel dealerCardPanel;
-    private JPanel previousCards;
-    private JLabel roundLabel;
+    /******************************************** Data Attributes  ****************************************************/
+    private final JFrame frame; // this is the main game frame
+    private JPanel cardPanel; // this Panel will hold the user's cards
+    private JPanel previousCards; // this panel holds a history of the previous card selections
+    private JLabel roundLabel; // this panel is used to display the current round information
     private ActionListener startButtonListener;
-
     private ActionListener howToPlayButtonListener;
     private ActionListener dealButtonListener;
     private ActionListener quitButtonListener;
     private ActionListener backButtonListener;
 
-    private final Deck deck;
+    private final Deck deck; // a deck of 52 Cards
 
+    // Global font/style declarations
     private final Font bigFont = new Font("Serif", Font.BOLD, 20);
     private final Font regFont = new Font("Serif", Font.BOLD, 14);
     private final Font titleFont = new Font("Serif", Font.BOLD, 64);
-
     private final Font buttonFont = new Font("Serif", Font.PLAIN, 14);
     private final Color bg = new Color(53,101,77);
-
     private final Color txt = new Color(255, 255, 255);
+
+    /******************************************************************************************************************/
 
     /**
      * The constructor is used to create the frame that is used throughout the game.
@@ -154,7 +144,7 @@ public class GUI {
     /**
      * @return The instructions for playing the game.
      */
-    private static JLabel getjLabel() {
+    private static JLabel getInstructionsjLabel() {
         JLabel descriptionLabel = new JLabel("<html>" +
                  "<body style=color:white; font-family: serif>"
                 + "<h2>Introduction</h2>"
@@ -217,11 +207,13 @@ public class GUI {
      * Creates and displays the main game window.
      */
     public void showGameScreen(int roundNumber, int currentWins, int requiredWins) {
+
+        // Main Panel for the Game Screen
         JPanel gameScreenPanel = new JPanel(new BorderLayout());
         gameScreenPanel.setBackground(bg);
         gameScreenPanel.setForeground(txt);
 
-        // Round Panel
+        /***************** Round Panel ********************************************************************************/
         JPanel roundPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         roundPanel.setBackground(bg);
         roundPanel.setForeground(txt);
@@ -230,10 +222,9 @@ public class GUI {
         roundLabel.setForeground(txt);
         roundPanel.add(roundLabel);
         roundPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
-        // gameScreenPanel.add(roundPanel, BorderLayout.NORTH);
+        /**************************************************************************************************************/
 
-
-        // Main area - includes Card display and Round Information
+        /******************* Main area - includes Card display and Round Information **********************************/
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.add(roundPanel, BorderLayout.NORTH);
 
@@ -258,18 +249,9 @@ public class GUI {
         cardPanelAndHeading.add(cardPanel, BorderLayout.CENTER);
         mainPanel.add(cardPanelAndHeading, BorderLayout.CENTER);
         gameScreenPanel.add(mainPanel, BorderLayout.CENTER);
+        /*************************************************************************************************************/
 
-        // cardPanel = new JPanel(new FlowLayout());
-        // cardPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
-        // cardPanelAndHeading.add(cardPanel, BorderLayout.CENTER);
-        // gameScreenPanel.add(cardPanelAndHeading, BorderLayout.CENTER);
-        //
-        // cardPanel = new JPanel(new FlowLayout());
-        // cardPanel.setBorder(new EmptyBorder(10, 20, 20, 20));
-        // cardPanelAndHeading.add(cardPanel, BorderLayout.CENTER);
-        // gameScreenPanel.add(cardPanelAndHeading, BorderLayout.CENTER);
-
-        // Previous Cards
+        /************************************* Previous Cards *********************************************************/
         previousCards = new JPanel();
         previousCards.setForeground(txt);
         previousCards.setBackground(bg);
@@ -290,8 +272,9 @@ public class GUI {
         previousCardsScroll.setFont(regFont);
         previousCardsScroll.setBorder(null);
         gameScreenPanel.add(previousCardsScroll, BorderLayout.WEST);
+        /*************************************************************************************************************/
 
-        // Button Panel
+        /***************************************** Button Panel *******************************************************/
         JPanel buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setBackground(bg);
         JButton dealButton = new JButton("Pick Cards");
@@ -306,6 +289,8 @@ public class GUI {
                 BorderFactory.createMatteBorder(1, 0, 0, 0, Color.BLACK), // Right border
                 BorderFactory.createEmptyBorder(0, 0, 20, 0) // Padding
         ));
+
+        /*************************************************************************************************************/
 
         /*
         Once again, the action listeners for the buttons return flow to the game controller rather than handling them
@@ -386,6 +371,10 @@ public class GUI {
         previousCards.repaint();
     }
 
+    /**
+     * Display's a window showing the dealer's selections, only used on pattern 9.
+     * @param message A string of text representing the dealer's choice of cards.
+     */
     public void announceSelectionPatternNine(String message) {
         JOptionPane.showMessageDialog(frame, message);
     }
@@ -559,10 +548,6 @@ public Hand displayChoice() {
         JOptionPane.showMessageDialog(frame, message);
     }
 
-    public void displayGameResult(String s) {
-        JOptionPane.showMessageDialog(frame, s);
-    }
-
     /**
      * @return the user's choice of restarting (1) or quitting (2)
      */
@@ -579,6 +564,9 @@ public Hand displayChoice() {
         return choice + 1; // Returning 1 for "Restart" and 2 for "Quit"
     }
 
+    /**
+     * play's a sound effect, used when the user wins a round
+     */
     public void playVictorySound()  {
         try {
             AudioInputStream sound =
@@ -598,6 +586,9 @@ public Hand displayChoice() {
         }
     }
 
+    /**
+     * shows a new window containing game instructions
+     */
     public void showInstructionsScreen() {
         frame.revalidate();
         frame.repaint();
@@ -606,7 +597,7 @@ public Hand displayChoice() {
         instructionsPanel.setBackground(bg);
         instructionsPanel.setForeground(Color.white);
 
-        JLabel gameDescriptionLabel = getjLabel(); // a method below that returns the content of the label
+        JLabel gameDescriptionLabel = getInstructionsjLabel(); // a method below that returns the content of the label
         gameDescriptionLabel.setForeground(txt);
         // // gameDescriptionLabel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
         instructionsPanel.add(gameDescriptionLabel, BorderLayout.CENTER);

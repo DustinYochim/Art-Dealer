@@ -465,6 +465,18 @@ public class GameController {
                 gui.displayPrevious(userHand.format_hand_for_logger());
                 logFile.writeToFile(userHand.format_hand_for_logger());
 
+                boolean allCardsSelected = true;
+                for (Card card : dealerHand.getHand()) {
+                    if (card.getChosenByDealer() == false) {
+                        allCardsSelected = false;
+                        break;
+                    }
+                }
+
+                if (allCardsSelected) {
+                    handleUserScore();
+                }
+
                 for (Card card : dealerHand.getHand()) {
                     card.setChosenByDealer(false);
                 }

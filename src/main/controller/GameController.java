@@ -466,8 +466,8 @@ public class GameController {
                 logFile.writeToFile(userHand.format_hand_for_logger());
 
                 boolean allCardsSelected = true;
-                for (Card card : dealerHand.getHand()) {
-                    if (card.getChosenByDealer() == false) {
+                for (Card card : userHand.getHand()) {
+                    if (!card.getChosenByDealer()) {
                         allCardsSelected = false;
                         break;
                     }
